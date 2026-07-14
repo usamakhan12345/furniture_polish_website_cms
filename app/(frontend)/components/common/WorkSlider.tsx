@@ -46,11 +46,10 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
 
   if (!slides || slides.length === 0) return null
 
-  // Group slides into pairs for widescreen layouts, showing two cards per page
   const itemsPerPage = 2
 
   return (
-    <section id="portfolio" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-slate-900 overflow-hidden">
+    <section id="portfolio" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0806] overflow-hidden border-t border-amber-950/5">
       {/* Wood Glow decoration */}
       <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
 
@@ -59,20 +58,20 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
         {/* Header Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-16 gap-6">
           <div>
-            <span className="text-amber-400 font-bold text-sm tracking-wider uppercase mb-2 block">
+            <span className="text-amber-400 font-bold text-sm tracking-wider uppercase mb-2 block animate-fade-in-right">
               Our Craftsmanship Portfolio
             </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight animate-fade-in-up">
               {heading}
             </h2>
           </div>
           
           {slides.length > itemsPerPage && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 animate-fade-in-up">
               <button
                 type="button"
                 onClick={handlePrev}
-                className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-all duration-200"
+                className="p-3.5 rounded-xl bg-[#18110B] border border-amber-950/10 text-slate-400 hover:text-white hover:border-amber-500/30 transition-all duration-200"
                 aria-label="Previous Slide"
               >
                 <ArrowLeft className="w-5 h-5" />
@@ -80,7 +79,7 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
               <button
                 type="button"
                 onClick={handleNext}
-                className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-all duration-200"
+                className="p-3.5 rounded-xl bg-[#18110B] border border-amber-950/10 text-slate-400 hover:text-white hover:border-amber-500/30 transition-all duration-200"
                 aria-label="Next Slide"
               >
                 <ArrowRight className="w-5 h-5" />
@@ -103,10 +102,10 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
               return (
                 <div
                   key={slide.id || idx}
-                  className="w-full md:w-[calc(50%-12px)] flex-shrink-0 flex flex-col bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 transition-all duration-300 shadow-xl"
+                  className="w-full md:w-[calc(50%-12px)] flex-shrink-0 flex flex-col bg-[#18110B] border border-amber-950/10 rounded-2xl overflow-hidden shadow-xl wood-card-hover"
                 >
                   {/* Card Image */}
-                  <div className="aspect-[16/10] w-full overflow-hidden relative group border-b border-slate-900">
+                  <div className="aspect-[16/10] w-full overflow-hidden relative group border-b border-amber-950/10">
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 to-transparent z-10" />
                     {imgUrl ? (
                       <img

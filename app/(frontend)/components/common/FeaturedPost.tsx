@@ -31,7 +31,7 @@ export const FeaturedPost: React.FC<FeaturedPostProps> = ({
   const imgAlt = typeof image === 'object' && image?.alt ? image.alt : 'Featured Post Image'
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-slate-950 overflow-hidden">
+    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0806] overflow-hidden">
       {/* Decorative Blur */}
       <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 
@@ -52,7 +52,7 @@ export const FeaturedPost: React.FC<FeaturedPostProps> = ({
             <div>
               <Link
                 href={getCtaHref(cta)}
-                className="inline-flex items-center justify-center px-6 py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-xl shadow-lg transition-all duration-200"
+                className="inline-flex items-center justify-center px-6 py-3.5 bg-gradient-to-r from-amber-50 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-lg shadow-lg hover:shadow-amber-500/10 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
               >
                 {cta.text}
               </Link>
@@ -63,7 +63,7 @@ export const FeaturedPost: React.FC<FeaturedPostProps> = ({
         {/* Image Column */}
         <div className="lg:col-span-6 order-1 lg:order-2">
           {imgUrl ? (
-            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-slate-800 bg-slate-900 group shadow-2xl">
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-amber-950/10 bg-slate-900 group shadow-2xl transition-all duration-300 hover:border-amber-500/30">
               {/* Wooden Border Overlay */}
               <div className="absolute inset-0 border-[6px] border-amber-500/10 group-hover:border-amber-500/20 z-20 transition-colors duration-300 pointer-events-none rounded-3xl" />
               <img

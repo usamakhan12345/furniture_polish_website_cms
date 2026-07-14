@@ -30,14 +30,14 @@ export const FeedbackSection: React.FC<FeedbackSectionProps> = ({
   if (!testimonials || testimonials.length === 0) return null
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-slate-900 overflow-hidden">
+    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0806] overflow-hidden border-t border-amber-950/5">
       {/* Decorative Blur */}
       <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 animate-fade-in-up">
           {subheading && (
             <span className="text-amber-400 font-bold text-sm tracking-wider uppercase mb-2 block">
               {subheading}
@@ -57,7 +57,7 @@ export const FeedbackSection: React.FC<FeedbackSectionProps> = ({
             return (
               <div
                 key={t.id || idx}
-                className="flex flex-col bg-slate-950 border border-slate-800/80 p-8 rounded-2xl hover:border-slate-700 transition-all duration-300 shadow-xl"
+                className="flex flex-col bg-[#18110B] border border-amber-950/10 p-8 rounded-2xl shadow-xl wood-card-hover"
               >
                 {/* Stars Rating */}
                 <div className="flex items-center gap-1 mb-6">
@@ -89,7 +89,7 @@ export const FeedbackSection: React.FC<FeedbackSectionProps> = ({
                     <img
                       src={avatarUrl}
                       alt={avatarAlt}
-                      className="w-12 h-12 rounded-full object-cover border border-slate-800"
+                      className="w-12 h-12 rounded-full object-cover border border-amber-950/10"
                     />
                   ) : (
                     <div className="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 font-bold text-sm">

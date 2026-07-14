@@ -38,7 +38,7 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
   const videoUrl = typeof backgroundVideo === 'object' && backgroundVideo?.url ? backgroundVideo.url : ''
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 px-4 sm:px-6 lg:px-8 bg-slate-950">
+    <section className="relative min-h-[95vh] flex items-center justify-start overflow-hidden py-32 bg-[#0B0806]">
       {/* Background Video / Image Selector */}
       {videoUrl ? (
         <div className="absolute inset-0 z-0">
@@ -50,7 +50,7 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
             playsInline
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/70 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B0806] via-[#0B0806]/85 to-transparent z-10" />
         </div>
       ) : bgUrl ? (
         <div className="absolute inset-0 z-0">
@@ -59,38 +59,38 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
             alt={bgAlt}
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/90 to-slate-950/85 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B0806] via-[#0B0806]/90 to-transparent z-10" />
         </div>
       ) : (
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-amber-950/20 via-slate-950 to-slate-950" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-amber-950/20 via-[#0B0806] to-[#0B0806]" />
       )}
 
-      {/* Glow Effect */}
-      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none z-10" />
+      {/* Decorative Glow */}
+      <div className="absolute top-1/4 left-1/4 w-[450px] h-[450px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none z-10 animate-pulse-glow" />
 
-      {/* Content Container */}
-      <div className="relative max-w-5xl mx-auto text-center z-20 flex flex-col items-center">
+      {/* Content Container (Left-aligned) */}
+      <div className="relative max-w-7xl mx-auto w-full z-20 text-left px-4 sm:px-6 lg:px-8 flex flex-col items-start">
         {subHeading && (
-          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 mb-6 uppercase animate-fade-in">
+          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/20 mb-6 uppercase animate-fade-in-right">
             {subHeading}
           </span>
         )}
 
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-none mb-8 max-w-4xl drop-shadow-sm">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-tight mb-8 max-w-3xl drop-shadow-md animate-fade-in-up">
           {heading}
         </h1>
 
         {description && (
-          <p className="text-lg sm:text-xl text-slate-300 max-w-3xl leading-relaxed mb-12 font-medium">
+          <p className="text-lg sm:text-xl text-slate-300 max-w-2xl leading-relaxed mb-12 font-medium animate-fade-in-up delay-100">
             {description}
           </p>
         )}
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 items-center animate-fade-in-up delay-200 w-full sm:w-auto">
           {ctaButton?.text ? (
             <Link
               href={getCtaHref(ctaButton)}
-              className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-xl shadow-lg hover:shadow-amber-500/20 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 text-center"
+              className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-lg shadow-lg hover:shadow-amber-500/20 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 text-center"
             >
               {ctaButton.text}
             </Link>
@@ -99,7 +99,7 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
           {secondaryCta?.text ? (
             <Link
               href={getCtaHref(secondaryCta)}
-              className="w-full sm:w-auto px-8 py-4 bg-slate-900/60 hover:bg-slate-800/80 text-white font-semibold rounded-xl border border-slate-700/60 hover:border-slate-600 transform hover:-translate-y-0.5 active:translate-y-0 backdrop-blur-md transition-all duration-200 text-center"
+              className="w-full sm:w-auto px-8 py-4 bg-[#18110B]/60 hover:bg-[#18110B]/85 text-white font-semibold rounded-lg border border-amber-900/20 hover:border-amber-900/40 transform hover:-translate-y-0.5 active:translate-y-0 backdrop-blur-md transition-all duration-200 text-center"
             >
               {secondaryCta.text}
             </Link>
@@ -109,3 +109,4 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
     </section>
   )
 }
+export default HomeBanner

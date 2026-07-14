@@ -80,7 +80,6 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
   const logoUrl = typeof data.logo === 'object' && data.logo?.url ? data.logo.url : ''
   const logoAlt = typeof data.logo === 'object' && data.logo?.alt ? data.logo.alt : 'Logo'
 
-  // Default links pointing to anchors
   const defaultLinks: NavLink[] = [
     { id: 'fl1', label: 'Home', link: '/' },
     { id: 'fl2', label: 'Portfolio', link: '#portfolio' },
@@ -90,7 +89,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
   const activeLinks = data.navigationLinks && data.navigationLinks.length > 0 ? data.navigationLinks : defaultLinks
 
   return (
-    <footer className="bg-slate-950 border-t border-slate-900 py-16 px-4 sm:px-6 lg:px-8">
+    <footer className="bg-[#0B0806] border-t border-amber-950/10 py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
         
         {/* Logo & Description */}
@@ -99,7 +98,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
             {logoUrl ? (
               <img src={logoUrl} alt={logoAlt} className="h-10 w-auto object-contain" />
             ) : (
-              <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">
+              <span className="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">
                 POLISH MASTER
               </span>
             )}
@@ -117,7 +116,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
                 href={s.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-amber-400 hover:border-slate-700 transition-all duration-200"
+                className="p-2.5 rounded-lg bg-[#18110B] border border-amber-950/10 text-slate-400 hover:text-amber-400 hover:border-amber-500/30 transition-all duration-200"
               >
                 {getSocialIcon(s.platform)}
               </a>
@@ -178,7 +177,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
       </div>
 
       {/* Copyright Banner */}
-      <div className="max-w-7xl mx-auto pt-8 border-t border-slate-900/60 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-semibold text-slate-500">
+      <div className="max-w-7xl mx-auto pt-8 border-t border-amber-950/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-semibold text-slate-500">
         <span>
           {data.copyright || `© ${new Date().getFullYear()} Polish Master. All rights reserved.`}
         </span>

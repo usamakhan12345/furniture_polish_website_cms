@@ -38,8 +38,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
-  const defaultPhones: PhoneItem[] = [{ id: 'dp1', phone: '0312-0129875' }, { id: 'dp2', phone: '03002855019' }]
-  const defaultWhatsapps: WhatsappItem[] = [{ id: 'dw1', whatsapp: '03032584068' }]
+  const defaultPhones = [{ id: 'dp1', phone: '0312-0129875' }, { id: 'dp2', phone: '03002855019' }]
+  const defaultWhatsapps = [{ id: 'dw1', whatsapp: '03032584068' }]
 
   const activePhones = phoneNumbers && phoneNumbers.length > 0 ? phoneNumbers : defaultPhones
   const activeWhatsapps = whatsappNumbers && whatsappNumbers.length > 0 ? whatsappNumbers : defaultWhatsapps
@@ -48,25 +48,23 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
     e.preventDefault()
     setStatus('loading')
 
-    // Simulate submission
     setTimeout(() => {
       setStatus('success')
       setFormData({ name: '', email: '', message: '' })
     }, 1500)
   }
 
-  // Convert numbers to clean format for links
   const cleanNumber = (num: string) => num.replace(/[^0-9+]/g, '')
 
   return (
-    <section id="contact" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-slate-950 overflow-hidden">
+    <section id="contact" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0806] overflow-hidden border-t border-amber-950/5">
       {/* Glow Effect */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
         
         {/* Left Column: Details */}
-        <div className="lg:col-span-5 flex flex-col justify-center">
+        <div className="lg:col-span-5 flex flex-col justify-center animate-fade-in-right">
           <span className="text-amber-400 font-bold text-sm tracking-wider uppercase mb-2 block">
             Get in Touch
           </span>
@@ -83,7 +81,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           <div className="space-y-6">
             
             {/* Phones Card */}
-            <div className="flex gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-900 hover:border-slate-800 transition-all">
+            <div className="flex gap-4 p-5 rounded-2xl bg-[#18110B]/40 border border-amber-950/10 hover:border-amber-500/20 transition-all duration-300">
               <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-400 self-start">
                 <Phone className="w-6 h-6" />
               </div>
@@ -102,7 +100,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             </div>
 
             {/* WhatsApp Card */}
-            <div className="flex gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-900 hover:border-slate-800 transition-all">
+            <div className="flex gap-4 p-5 rounded-2xl bg-[#18110B]/40 border border-amber-950/10 hover:border-emerald-500/20 transition-all duration-300">
               <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 self-start">
                 <MessageSquare className="w-6 h-6" />
               </div>
@@ -124,7 +122,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
             {/* Address Location Card */}
             {location && (
-              <div className="flex gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-900 hover:border-slate-800 transition-all">
+              <div className="flex gap-4 p-5 rounded-2xl bg-[#18110B]/40 border border-amber-950/10 hover:border-amber-500/20 transition-all duration-300">
                 <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-400 self-start">
                   <MapPin className="w-6 h-6" />
                 </div>
@@ -141,7 +139,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         </div>
 
         {/* Right Column: Inquiry Form */}
-        <div className="lg:col-span-7 bg-slate-900/30 border border-slate-900 backdrop-blur-sm rounded-3xl p-8 sm:p-10 shadow-2xl">
+        <div className="lg:col-span-7 bg-[#18110B]/30 border border-amber-950/10 backdrop-blur-sm rounded-3xl p-8 sm:p-10 shadow-2xl animate-fade-in-up">
           <h3 className="text-2xl font-bold text-white mb-8">Send Us a Message</h3>
           
           {status === 'success' ? (
@@ -170,7 +168,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. John Doe"
-                    className="bg-slate-950/60 border border-slate-800/80 rounded-xl px-4 py-3.5 text-white font-medium focus:border-amber-500 focus:outline-none transition-all placeholder:text-slate-600"
+                    className="bg-[#0B0806]/60 border border-amber-950/10 rounded-xl px-4 py-3.5 text-white font-medium focus:border-amber-500 focus:outline-none transition-all placeholder:text-slate-600"
                   />
                 </div>
                 <div className="flex flex-col">
@@ -182,7 +180,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="e.g. john@example.com"
-                    className="bg-slate-950/60 border border-slate-800/80 rounded-xl px-4 py-3.5 text-white font-medium focus:border-amber-500 focus:outline-none transition-all placeholder:text-slate-600"
+                    className="bg-[#0B0806]/60 border border-amber-950/10 rounded-xl px-4 py-3.5 text-white font-medium focus:border-amber-500 focus:outline-none transition-all placeholder:text-slate-600"
                   />
                 </div>
               </div>
@@ -196,7 +194,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Tell us about your furniture polishing project details..."
-                  className="bg-slate-950/60 border border-slate-800/80 rounded-xl px-4 py-3.5 text-white font-medium focus:border-amber-500 focus:outline-none transition-all placeholder:text-slate-600 resize-none"
+                  className="bg-[#0B0806]/60 border border-amber-950/10 rounded-xl px-4 py-3.5 text-white font-medium focus:border-amber-500 focus:outline-none transition-all placeholder:text-slate-600 resize-none"
                 />
               </div>
 

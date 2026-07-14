@@ -31,10 +31,10 @@ export const ReadyToBuild: React.FC<ReadyToBuildProps> = ({
   const bgAlt = typeof backgroundImage === 'object' && backgroundImage?.alt ? backgroundImage.alt : 'Background Image'
 
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-slate-950 overflow-hidden">
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-[#0B0806] overflow-hidden border-t border-amber-950/5">
       <div className="max-w-6xl mx-auto relative z-10">
         
-        <div className="relative rounded-3xl overflow-hidden border border-slate-800 p-8 sm:p-12 lg:p-16 bg-slate-900/10 backdrop-blur-sm shadow-2xl text-center flex flex-col items-center">
+        <div className="relative rounded-3xl overflow-hidden border border-amber-950/10 p-8 sm:p-12 lg:p-16 bg-[#18110B]/30 backdrop-blur-sm shadow-2xl text-center flex flex-col items-center">
           
           {/* Card background media */}
           {bgUrl && (
@@ -44,7 +44,7 @@ export const ReadyToBuild: React.FC<ReadyToBuildProps> = ({
                 alt={bgAlt}
                 className="w-full h-full object-cover object-center"
               />
-              <div className="absolute inset-0 bg-slate-950/85 z-10" />
+              <div className="absolute inset-0 bg-[#0B0806]/85 z-10" />
             </div>
           )}
 
@@ -52,7 +52,7 @@ export const ReadyToBuild: React.FC<ReadyToBuildProps> = ({
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.05)_0%,transparent_70%)] z-10 pointer-events-none" />
 
           {/* Content */}
-          <div className="relative z-20 max-w-3xl">
+          <div className="relative z-20 max-w-3xl animate-fade-in-up">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-6">
               {heading}
             </h2>

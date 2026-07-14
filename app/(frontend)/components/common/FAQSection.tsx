@@ -29,11 +29,11 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
   if (!questions || questions.length === 0) return null
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-slate-950 overflow-hidden">
+    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0806] overflow-hidden border-t border-amber-950/5">
       {/* Glow effect */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[350px] h-[350px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto relative z-10">
+      <div className="max-w-4xl mx-auto relative z-10 animate-fade-in-up">
         
         {/* Header */}
         <div className="text-center mb-16">
@@ -58,25 +58,25 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
             return (
               <div
                 key={faq.id || idx}
-                className="border border-slate-900 rounded-2xl bg-slate-950/40 backdrop-blur-sm overflow-hidden hover:border-slate-800 transition-all duration-300"
+                className="border border-amber-950/10 rounded-2xl bg-[#18110B]/30 backdrop-blur-sm overflow-hidden hover:border-amber-500/20 transition-all duration-300"
               >
                 <button
                   type="button"
                   onClick={() => toggleOpen(idx)}
-                  className="w-full flex items-center justify-between p-6 sm:p-8 text-left text-white font-bold text-lg hover:text-amber-300 transition-colors duration-200"
+                  className="w-full flex items-center justify-between p-6 sm:p-8 text-left text-white font-bold text-lg hover:text-amber-400 transition-colors duration-200"
                 >
                   <span>{faq.question}</span>
-                  <span className={`p-2 rounded-lg bg-slate-900 text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-amber-400' : ''}`}>
+                  <span className={`p-2 rounded-lg bg-[#18110B] text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-amber-400' : ''}`}>
                     {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                   </span>
                 </button>
 
                 <div
                   className={`transition-all duration-300 ease-in-out ${
-                    isOpen ? 'max-h-[500px] border-t border-slate-900' : 'max-h-0'
+                    isOpen ? 'max-h-[500px] border-t border-amber-950/10' : 'max-h-0'
                   } overflow-hidden`}
                 >
-                  <p className="p-6 sm:p-8 text-slate-300 text-base leading-relaxed font-medium bg-slate-950/60 whitespace-pre-line">
+                  <p className="p-6 sm:p-8 text-slate-300 text-base leading-relaxed font-medium bg-[#18110B]/20 whitespace-pre-line">
                     {faq.answer}
                   </p>
                 </div>
