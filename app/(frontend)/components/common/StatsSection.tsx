@@ -33,11 +33,11 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
   stats,
 }) => {
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF6EE] overflow-hidden">
+    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#FAF6EE] via-[#FDFBF7] to-[#F5EBE0] overflow-hidden border-t border-amber-950/5">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
         
         {/* Left Side Info */}
-        <div className="lg:col-span-7 flex flex-col justify-center">
+        <div className="lg:col-span-7 flex flex-col justify-center animate-fade-in-right">
           {subheading && (
             <span className="inline-flex items-center text-amber-600 font-extrabold text-sm uppercase tracking-widest gap-2.5 mb-5">
               <span className="w-1.5 h-3.5 bg-amber-600 rounded-sm" />
@@ -55,12 +55,12 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
             </p>
           )}
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 items-center">
+          {/* CTA Buttons (Hover Swaps) */}
+          <div className="flex flex-col sm:flex-row gap-4 items-center w-full sm:w-auto">
             {cta1?.text && (
               <Link
                 href={getCtaHref(cta1)}
-                className="w-full sm:w-auto px-7 py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg shadow-md hover:shadow-amber-500/10 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 text-center"
+                className="w-full sm:w-auto px-7 py-3.5 bg-amber-500 hover:bg-transparent border border-transparent hover:border-amber-600 text-slate-950 hover:text-amber-700 font-bold rounded-lg shadow-md hover:shadow-amber-500/10 transition-all duration-300 text-center"
               >
                 {cta1.text}
               </Link>
@@ -69,7 +69,7 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
             {cta2?.text && (
               <Link
                 href={getCtaHref(cta2)}
-                className="w-full sm:w-auto px-7 py-3.5 border border-slate-950 text-slate-950 font-bold rounded-lg hover:bg-slate-950/5 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 text-center"
+                className="w-full sm:w-auto px-7 py-3.5 bg-transparent hover:bg-slate-950 border border-slate-950 hover:border-transparent text-slate-950 hover:text-white font-bold rounded-lg transition-all duration-300 text-center"
               >
                 {cta2.text}
               </Link>
@@ -78,7 +78,7 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
         </div>
 
         {/* Right Side Stats Grid */}
-        <div className="lg:col-span-5 grid grid-cols-2 gap-x-8 gap-y-12">
+        <div className="lg:col-span-5 grid grid-cols-2 gap-x-8 gap-y-12 animate-fade-in-up">
           {stats?.map((stat, idx) => (
             <div key={stat.id || idx} className="flex flex-col">
               <span className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-amber-600 mb-2 tracking-tight">

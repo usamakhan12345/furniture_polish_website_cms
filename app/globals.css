@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0B0806; /* Espresso-Black */
-  --foreground: #FDFBF9; /* Warm White */
-  --accent-amber: #EAB308; /* Warm Gold */
-  --accent-wood: #D97706; /* Amber Polish */
-  --card-background: #18110B; /* Dark Walnut */
+  --background: #FDFBF9; /* Warm White/Cream */
+  --foreground: #0B0806; /* Espresso-Black */
+  --accent-amber: #D97706; /* Amber Polish (Orange/Gold) */
+  --accent-wood: #B45309; /* Warm Oak */
+  --card-background: #FFFFFF; /* Pure White Card */
 }
 
 @theme inline {
@@ -19,9 +19,10 @@
 }
 
 body {
-  background-color: var(--background);
+  background: linear-gradient(to bottom, #FAF6EE, #FDFBF9, #F5EBE0);
   color: var(--foreground);
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
 /* Keyframe Animations */
@@ -94,6 +95,6 @@ body {
 }
 .wood-card-hover:hover {
   transform: translateY(-6px);
-  border-color: rgba(245, 158, 11, 0.25);
-  box-shadow: 0 20px 40px -15px rgba(245, 158, 11, 0.08);
+  border-color: rgba(217, 119, 6, 0.2);
+  box-shadow: 0 20px 40px -15px rgba(217, 119, 6, 0.06);
 }

@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Phone, MessageSquare, MapPin, Send, Loader2 } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { Phone, MessageSquare, MapPin, Send, Loader2, X } from 'lucide-react'
 
 interface PhoneItem {
   id?: string
@@ -37,6 +37,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [isMapOpen, setIsMapOpen] = useState(false)
+
+  // Prevent background scrolling when modal is active
+  useEffect(() => {
+    if (isMapOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMapOpen])
 
   const defaultPhones = [{ id: 'dp1', phone: '0312-0129875' }, { id: 'dp2', phone: '03002855019' }]
   const defaultWhatsapps = [{ id: 'dw1', whatsapp: '03032584068' }]
@@ -55,9 +68,32 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   }
 
   const cleanNumber = (num: string) => num.replace(/[^0-9+]/g, '')
+  
+  // Robust WhatsApp parser (strips +, spaces, leading 0 replaced with Pakistan code 92)
+  const cleanWhatsapp = (num: string) => {
+    let digits = num.replace(/\D/g, '')
+    if (digits.startsWith('0')) {
+      digits = '92' + digits.substring(1)
+    }
+    return digits
+  }
+
+  const prefilledText = encodeURIComponent('Hello! I would like to inquire about your furniture polishing services.')
+
+  // Resolve Map URLs dynamically for public iframe embeds
+  let embedUrl = ''
+  if (mapUrl) {
+    if (mapUrl.includes('embed') || mapUrl.includes('output=embed')) {
+      embedUrl = mapUrl
+    } else {
+      embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(mapUrl)}&output=embed`
+    }
+  } else if (location) {
+    embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(location)}&output=embed`
+  }
 
   return (
-    <section id="contact" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0806] overflow-hidden border-t border-amber-950/5">
+    <section id="contact" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
       {/* Glow Effect */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
 
@@ -65,14 +101,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         
         {/* Left Column: Details */}
         <div className="lg:col-span-5 flex flex-col justify-center animate-fade-in-right">
-          <span className="text-amber-400 font-bold text-sm tracking-wider uppercase mb-2 block">
+          <span className="text-amber-600 font-bold text-sm tracking-wider uppercase mb-2 block">
             Get in Touch
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
             {heading}
           </h2>
           {description && (
-            <p className="text-slate-300 text-base leading-relaxed mb-10 font-medium">
+            <p className="text-slate-600 text-base leading-relaxed mb-10 font-medium">
               {description}
             </p>
           )}
@@ -81,17 +117,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           <div className="space-y-6">
             
             {/* Phones Card */}
-            <div className="flex gap-4 p-5 rounded-2xl bg-[#18110B]/40 border border-amber-950/10 hover:border-amber-500/20 transition-all duration-300">
-              <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-400 self-start">
+            <div className="flex gap-4 p-5 rounded-2xl bg-[#FDFBF9] border border-slate-200 hover:border-amber-500/20 transition-all duration-300">
+              <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-600 self-start">
                 <Phone className="w-6 h-6" />
               </div>
               <div className="flex flex-col">
-                <h3 className="text-white font-bold mb-2">Call Us Directly</h3>
+                <h3 className="text-slate-800 font-bold mb-2">Call Us Directly</h3>
                 {activePhones.map((p, idx) => (
                   <a
                     key={p.id || idx}
                     href={`tel:${cleanNumber(p.phone)}`}
-                    className="text-slate-300 hover:text-amber-400 font-bold text-base mb-1 transition-colors"
+                    className="text-slate-600 hover:text-amber-600 font-bold text-base mb-1 transition-colors"
                   >
                     {p.phone}
                   </a>
@@ -100,19 +136,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             </div>
 
             {/* WhatsApp Card */}
-            <div className="flex gap-4 p-5 rounded-2xl bg-[#18110B]/40 border border-amber-950/10 hover:border-emerald-500/20 transition-all duration-300">
-              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 self-start">
+            <div className="flex gap-4 p-5 rounded-2xl bg-[#FDFBF9] border border-slate-200 hover:border-emerald-500/20 transition-all duration-300">
+              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-600 self-start">
                 <MessageSquare className="w-6 h-6" />
               </div>
               <div className="flex flex-col">
-                <h3 className="text-white font-bold mb-2">Chat on WhatsApp</h3>
+                <h3 className="text-slate-800 font-bold mb-2">Chat on WhatsApp</h3>
                 {activeWhatsapps.map((w, idx) => (
                   <a
                     key={w.id || idx}
-                    href={`https://wa.me/${cleanNumber(w.whatsapp).replace(/^0/, '92')}`}
+                    href={`https://wa.me/${cleanWhatsapp(w.whatsapp)}?text=${prefilledText}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-slate-300 hover:text-emerald-400 font-bold text-base mb-1 transition-colors"
+                    className="text-slate-600 hover:text-emerald-600 font-bold text-base mb-1 transition-colors"
                   >
                     {w.whatsapp}
                   </a>
@@ -122,13 +158,21 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
             {/* Address Location Card */}
             {location && (
-              <div className="flex gap-4 p-5 rounded-2xl bg-[#18110B]/40 border border-amber-950/10 hover:border-amber-500/20 transition-all duration-300">
-                <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-400 self-start">
+              <div 
+                onClick={() => embedUrl && setIsMapOpen(true)}
+                className={`flex gap-4 p-5 rounded-2xl bg-[#FDFBF9] border border-slate-200 hover:border-amber-500/20 transition-all duration-300 ${
+                  embedUrl ? 'cursor-pointer' : ''
+                }`}
+              >
+                <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-500 self-start">
                   <MapPin className="w-6 h-6" />
                 </div>
                 <div className="flex flex-col">
-                  <h3 className="text-white font-bold mb-1">Our Location</h3>
-                  <p className="text-slate-300 text-sm font-medium leading-relaxed">
+                  <h3 className="text-slate-800 font-bold mb-1 flex items-center gap-2">
+                    <span>Our Location</span>
+                    {embedUrl && <span className="text-[10px] bg-indigo-500/10 text-indigo-600 px-1.5 py-0.5 rounded font-extrabold uppercase">Open Map</span>}
+                  </h3>
+                  <p className="text-slate-600 text-sm font-medium leading-relaxed">
                     {location}
                   </p>
                 </div>
@@ -139,11 +183,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         </div>
 
         {/* Right Column: Inquiry Form */}
-        <div className="lg:col-span-7 bg-[#18110B]/30 border border-amber-950/10 backdrop-blur-sm rounded-3xl p-8 sm:p-10 shadow-2xl animate-fade-in-up">
-          <h3 className="text-2xl font-bold text-white mb-8">Send Us a Message</h3>
+        <div className="lg:col-span-7 bg-[#FAF6EE]/50 border border-slate-200 backdrop-blur-sm rounded-3xl p-8 sm:p-10 shadow-sm animate-fade-in-up">
+          <h3 className="text-2xl font-bold text-slate-900 mb-8">Send Us a Message</h3>
           
           {status === 'success' ? (
-            <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-center animate-fade-in">
+            <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-center animate-fade-in">
               <p className="font-bold text-lg mb-2">Message Sent!</p>
               <p className="text-sm font-medium leading-relaxed">
                 {formSettings?.successMessage || 'Thank you! Your message has been sent successfully.'}
@@ -151,7 +195,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <button
                 type="button"
                 onClick={() => setStatus('idle')}
-                className="mt-6 text-sm font-bold text-emerald-400 hover:underline"
+                className="mt-6 text-sm font-bold text-emerald-600 hover:underline"
               >
                 Send another message
               </button>
@@ -160,7 +204,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="flex flex-col">
-                  <label htmlFor="name" className="text-slate-400 text-xs font-bold uppercase mb-2">Your Name</label>
+                  <label htmlFor="name" className="text-amber-600 text-xs font-bold uppercase mb-2">Your Name</label>
                   <input
                     type="text"
                     id="name"
@@ -168,11 +212,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. John Doe"
-                    className="bg-[#0B0806]/60 border border-amber-950/10 rounded-xl px-4 py-3.5 text-white font-medium focus:border-amber-500 focus:outline-none transition-all placeholder:text-slate-600"
+                    className="bg-[#FDFBF9] border border-slate-300 rounded-xl px-4 py-3.5 text-slate-900 font-medium focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-400"
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label htmlFor="email" className="text-slate-400 text-xs font-bold uppercase mb-2">Email Address</label>
+                  <label htmlFor="email" className="text-amber-600 text-xs font-bold uppercase mb-2">Email Address</label>
                   <input
                     type="email"
                     id="email"
@@ -180,13 +224,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="e.g. john@example.com"
-                    className="bg-[#0B0806]/60 border border-amber-950/10 rounded-xl px-4 py-3.5 text-white font-medium focus:border-amber-500 focus:outline-none transition-all placeholder:text-slate-600"
+                    className="bg-[#FDFBF9] border border-slate-300 rounded-xl px-4 py-3.5 text-slate-900 font-medium focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-400"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col">
-                <label htmlFor="message" className="text-slate-400 text-xs font-bold uppercase mb-2">Your Message</label>
+                <label htmlFor="message" className="text-amber-600 text-xs font-bold uppercase mb-2">Your Message</label>
                 <textarea
                   id="message"
                   required
@@ -194,7 +238,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Tell us about your furniture polishing project details..."
-                  className="bg-[#0B0806]/60 border border-amber-950/10 rounded-xl px-4 py-3.5 text-white font-medium focus:border-amber-500 focus:outline-none transition-all placeholder:text-slate-600 resize-none"
+                  className="bg-[#FDFBF9] border border-slate-300 rounded-xl px-4 py-3.5 text-slate-900 font-medium focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-400 resize-none"
                 />
               </div>
 
@@ -221,6 +265,36 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         </div>
 
       </div>
+
+      {/* Google Maps Modal Overlay */}
+      {isMapOpen && embedUrl && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="relative w-full max-w-4xl bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-2xl">
+            {/* Header */}
+            <div className="flex items-center justify-between p-5 border-b border-slate-100">
+              <h3 className="text-lg font-bold text-slate-900">Our Office Location</h3>
+              <button
+                type="button"
+                onClick={() => setIsMapOpen(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            {/* Map Iframe */}
+            <div className="aspect-video w-full">
+              <iframe
+                src={embedUrl}
+                className="w-full h-full border-0"
+                allowFullScreen
+                loading="lazy"
+              />
+            </div>
+          </div>
+          {/* Close click on backdrop */}
+          <div className="absolute inset-0 -z-10" onClick={() => setIsMapOpen(false)} />
+        </div>
+      )}
     </section>
   )
 }

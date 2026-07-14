@@ -31,20 +31,20 @@ export const FeaturedPost: React.FC<FeaturedPostProps> = ({
   const imgAlt = typeof image === 'object' && image?.alt ? image.alt : 'Featured Post Image'
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0806] overflow-hidden">
+    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-700 overflow-hidden border-t border-amber-500/10">
       {/* Decorative Blur */}
-      <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-white/10 rounded-full blur-[100px] pointer-events-none animate-pulse-glow" />
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
         {/* Text Column */}
-        <div className="lg:col-span-6 flex flex-col justify-center order-2 lg:order-1">
-          <span className="text-amber-400 font-bold text-sm tracking-wider uppercase mb-3 block">
+        <div className="lg:col-span-6 flex flex-col justify-center order-2 lg:order-1 animate-fade-in-right">
+          <span className="text-amber-100 font-bold text-sm tracking-wider uppercase mb-3 block">
             Featured Restoration
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
             {heading}
           </h2>
-          <p className="text-slate-300 text-lg leading-relaxed mb-10 font-medium whitespace-pre-line">
+          <p className="text-white text-lg leading-relaxed mb-10 font-medium whitespace-pre-line">
             {content}
           </p>
 
@@ -52,7 +52,7 @@ export const FeaturedPost: React.FC<FeaturedPostProps> = ({
             <div>
               <Link
                 href={getCtaHref(cta)}
-                className="inline-flex items-center justify-center px-6 py-3.5 bg-gradient-to-r from-amber-50 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-lg shadow-lg hover:shadow-amber-500/10 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                className="inline-flex items-center justify-center px-6 py-3.5 bg-slate-950 hover:bg-transparent border border-transparent hover:border-white text-white hover:text-white font-bold rounded-lg shadow-md transition-all duration-300"
               >
                 {cta.text}
               </Link>
@@ -61,11 +61,11 @@ export const FeaturedPost: React.FC<FeaturedPostProps> = ({
         </div>
 
         {/* Image Column */}
-        <div className="lg:col-span-6 order-1 lg:order-2">
+        <div className="lg:col-span-6 order-1 lg:order-2 animate-fade-in-up">
           {imgUrl ? (
-            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-amber-950/10 bg-slate-900 group shadow-2xl transition-all duration-300 hover:border-amber-500/30">
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-white/20 bg-slate-900 group shadow-2xl transition-all duration-300 hover:border-white/40">
               {/* Wooden Border Overlay */}
-              <div className="absolute inset-0 border-[6px] border-amber-500/10 group-hover:border-amber-500/20 z-20 transition-colors duration-300 pointer-events-none rounded-3xl" />
+              <div className="absolute inset-0 border-[6px] border-white/10 group-hover:border-white/20 z-20 transition-colors duration-300 pointer-events-none rounded-3xl" />
               <img
                 src={imgUrl}
                 alt={imgAlt}
@@ -73,7 +73,7 @@ export const FeaturedPost: React.FC<FeaturedPostProps> = ({
               />
             </div>
           ) : (
-            <div className="aspect-[4/3] w-full bg-slate-900 border border-slate-800 rounded-3xl flex items-center justify-center text-slate-500">
+            <div className="aspect-[4/3] w-full bg-slate-900 border border-white/10 rounded-3xl flex items-center justify-center text-slate-500">
               No Image Available
             </div>
           )}

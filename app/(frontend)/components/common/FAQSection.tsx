@@ -29,7 +29,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
   if (!questions || questions.length === 0) return null
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0806] overflow-hidden border-t border-amber-950/5">
+    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
       {/* Glow effect */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[350px] h-[350px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 
@@ -37,14 +37,14 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
         
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="text-amber-400 font-bold text-sm tracking-wider uppercase mb-2 block">
+          <span className="text-amber-600 font-bold text-sm tracking-wider uppercase mb-2 block">
             Got Questions?
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
             {heading}
           </h2>
           {description && (
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto font-medium">
+            <p className="text-slate-600 text-lg max-w-2xl mx-auto font-medium">
               {description}
             </p>
           )}
@@ -58,25 +58,31 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
             return (
               <div
                 key={faq.id || idx}
-                className="border border-amber-950/10 rounded-2xl bg-[#18110B]/30 backdrop-blur-sm overflow-hidden hover:border-amber-500/20 transition-all duration-300"
+                className={`border rounded-2xl bg-[#FDFBF9] overflow-hidden transition-all duration-300 ${
+                  isOpen
+                    ? 'border-amber-500 shadow-md shadow-amber-500/5'
+                    : 'border-slate-200 hover:border-amber-500/30'
+                }`}
               >
                 <button
                   type="button"
                   onClick={() => toggleOpen(idx)}
-                  className="w-full flex items-center justify-between p-6 sm:p-8 text-left text-white font-bold text-lg hover:text-amber-400 transition-colors duration-200"
+                  className={`w-full flex items-center justify-between p-6 sm:p-8 text-left font-bold text-lg transition-colors duration-200 ${
+                    isOpen ? 'text-amber-600' : 'text-slate-800 hover:text-amber-600'
+                  }`}
                 >
                   <span>{faq.question}</span>
-                  <span className={`p-2 rounded-lg bg-[#18110B] text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-amber-400' : ''}`}>
+                  <span className={`p-2 rounded-lg bg-white border border-slate-100 text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-amber-600' : ''}`}>
                     {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                   </span>
                 </button>
 
                 <div
                   className={`transition-all duration-300 ease-in-out ${
-                    isOpen ? 'max-h-[500px] border-t border-amber-950/10' : 'max-h-0'
+                    isOpen ? 'max-h-[500px] border-t border-slate-100' : 'max-h-0'
                   } overflow-hidden`}
                 >
-                  <p className="p-6 sm:p-8 text-slate-300 text-base leading-relaxed font-medium bg-[#18110B]/20 whitespace-pre-line">
+                  <p className="p-6 sm:p-8 text-slate-600 text-base leading-relaxed font-medium bg-slate-50/50 whitespace-pre-line">
                     {faq.answer}
                   </p>
                 </div>
