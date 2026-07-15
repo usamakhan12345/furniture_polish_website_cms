@@ -12,6 +12,7 @@ interface FeatureItem {
 }
 
 export interface WhyChooseUsProps {
+  anchorId?: string
   subheading?: string
   heading: string
   description: string
@@ -20,6 +21,7 @@ export interface WhyChooseUsProps {
 }
 
 export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({
+  anchorId,
   subheading,
   heading,
   description,
@@ -30,7 +32,7 @@ export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({
   const imgAlt = typeof image === 'object' && image?.alt ? image.alt : 'Showcase Image'
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'why-choose-us'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
       {/* Decorative background glow */}
       <div className="absolute top-1/4 left-0 w-[300px] h-[300px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 

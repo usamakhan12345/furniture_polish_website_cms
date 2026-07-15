@@ -19,6 +19,7 @@ interface Testimonial {
 }
 
 export interface FeedbackSectionProps {
+  anchorId?: string
   heading: string
   subheading?: string
   description?: string
@@ -26,6 +27,7 @@ export interface FeedbackSectionProps {
 }
 
 export const FeedbackSection: React.FC<FeedbackSectionProps> = ({
+  anchorId,
   heading,
   subheading,
   description,
@@ -63,7 +65,7 @@ export const FeedbackSection: React.FC<FeedbackSectionProps> = ({
   }
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF6EE] overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'feedback'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF6EE] overflow-hidden border-t border-slate-200/50">
       {/* Decorative Glow background blur */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
 

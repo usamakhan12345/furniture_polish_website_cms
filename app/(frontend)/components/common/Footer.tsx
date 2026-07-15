@@ -1,5 +1,9 @@
+'use client'
+
 import React from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { animateScrollToTop, animateScrollToY } from '../../../../utilities/scroll'
 
 interface Media {
   url?: string
@@ -9,7 +13,9 @@ interface Media {
 interface NavLink {
   id?: string
   label: string
-  link: string
+  isExternal?: boolean | null
+  link?: string | null
+  page?: string | { slug: string } | null
 }
 
 interface LinkGroup {
@@ -43,6 +49,27 @@ export interface FooterProps {
     socialLinks?: SocialLink[]
     contactInformation?: ContactInfo
   } | null
+}
+
+// Utility to resolve smooth anchor navigation across different page slugs
+const resolveNavLink = (href: string, pathname: string) => {
+  if (href.startsWith('#')) {
+    return pathname === '/' ? href : `/${href}`
+  }
+  return href
+}
+
+// Utility to get URL from a structured CTA/Link item
+const getFooterLinkHref = (item: NavLink, pathname: string) => {
+  let target = '#'
+  if (item.isExternal) {
+    target = item.link || '#'
+  } else if (item.page) {
+    if (typeof item.page === 'object' && item.page.slug) {
+      target = item.page.slug === 'home' ? '/' : `/${item.page.slug}`
+    }
+  }
+  return resolveNavLink(target, pathname)
 }
 
 const getSocialIcon = (platform: string) => {
@@ -85,6 +112,8 @@ const getSocialIcon = (platform: string) => {
 }
 
 export const Footer: React.FC<FooterProps> = ({ data }) => {
+  const pathname = usePathname()
+
   if (!data) return null
 
   // Resolve Custom Footer Logo (if present, fallback to default logo)
@@ -93,12 +122,38 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
   const logoAlt = typeof activeLogo === 'object' && activeLogo?.alt ? activeLogo.alt : 'Logo'
 
   const defaultLinks: NavLink[] = [
-    { id: 'fl1', label: 'Home', link: '/' },
-    { id: 'fl2', label: 'Portfolio', link: '#portfolio' },
-    { id: 'fl3', label: 'Contact Us', link: '#contact' },
+    { id: 'fl1', label: 'Home', isExternal: true, link: '/' },
+    { id: 'fl2', label: 'Portfolio', isExternal: true, link: '#portfolio' },
+    { id: 'fl3', label: 'Contact Us', isExternal: true, link: '#contact' },
   ]
 
   const activeLinks = data.navigationLinks && data.navigationLinks.length > 0 ? data.navigationLinks : defaultLinks
+
+  // Intercept click on same-page anchor tags to enforce smooth scroll
+  const handleScrollClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // If clicking home/logo while already on home page, scroll to top smoothly
+    if (href === '/' || href === '#home') {
+      if (pathname === '/') {
+        e.preventDefault()
+        animateScrollToTop(1200) // Custom slow scroll to top
+        window.history.pushState(null, '', '/')
+        return
+      }
+    }
+
+    if (href.startsWith('#')) {
+      const id = decodeURIComponent(href.substring(1))
+      const element = document.getElementById(id)
+      if (element) {
+        e.preventDefault()
+        const headerOffset = 112 // Height of the fixed header on desktop (h-28)
+        const elementPosition = element.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.scrollY - headerOffset
+        animateScrollToY(offsetPosition, 1200) // Custom slow scroll to Y coordinate
+        window.history.pushState(null, '', href)
+      }
+    }
+  }
 
   return (
     <footer className="bg-[#18110B] border-t border-amber-950/15 py-20 px-4 sm:px-6 lg:px-8">
@@ -106,7 +161,11 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
         
         {/* Logo & Description Column */}
         <div className="md:col-span-4 flex flex-col">
-          <Link href="/" className="flex items-center mb-6">
+          <Link
+            href="/"
+            onClick={(e) => handleScrollClick(e, '/')}
+            className="flex items-center mb-6"
+          >
             {logoUrl ? (
               <img src={logoUrl} alt={logoAlt} className="h-14 w-auto object-contain transition-transform duration-300 hover:scale-105" />
             ) : (
@@ -144,16 +203,20 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
                 {group.title}
               </h3>
               <ul className="space-y-3.5">
-                {group.links?.map((item, lIdx) => (
-                  <li key={item.id || lIdx}>
-                    <Link
-                      href={item.link}
-                      className="text-slate-400 hover:text-white text-sm font-semibold transition-colors duration-200"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
+                {group.links?.map((item, lIdx) => {
+                  const resolvedHref = getFooterLinkHref(item, pathname)
+                  return (
+                    <li key={item.id || lIdx}>
+                      <Link
+                        href={resolvedHref}
+                        onClick={(e) => handleScrollClick(e, resolvedHref)}
+                        className="text-slate-400 hover:text-white text-sm font-semibold transition-colors duration-200"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ))
@@ -164,21 +227,25 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
               Quick Links
             </h3>
             <ul className="space-y-3.5">
-              {activeLinks.map((item, idx) => (
-                <li key={item.id || idx}>
-                  <Link
-                    href={item.link}
-                    className="text-slate-400 hover:text-white text-sm font-semibold transition-colors duration-200"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
+              {activeLinks.map((item, idx) => {
+                const resolvedHref = getFooterLinkHref(item, pathname)
+                return (
+                  <li key={item.id || idx}>
+                    <Link
+                      href={resolvedHref}
+                      onClick={(e) => handleScrollClick(e, resolvedHref)}
+                      className="text-slate-400 hover:text-white text-sm font-semibold transition-colors duration-200"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         )}
 
-        {/* Contact Info Column (Wider grid span if dynamic columns are used) */}
+        {/* Contact Info Column */}
         <div className={`flex flex-col ${
           data.navigationGroups && data.navigationGroups.length > 0 ? 'md:col-span-4' : 'md:col-span-5'
         }`}>

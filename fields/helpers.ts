@@ -64,3 +64,15 @@ export const ctaHelper = (
   ],
   ...overrides,
 } as GroupField)
+
+import type { TextField } from 'payload'
+
+export const anchorIdHelper = (defaultPlaceholder: string = 'section-id'): TextField => ({
+  name: 'anchorId',
+  type: 'text',
+  label: 'Section Anchor ID (for links)',
+  admin: {
+    description: `Specify an HTML ID (without #) to link directly to this section (e.g. ${defaultPlaceholder}). If left blank, it defaults to ${defaultPlaceholder}.`,
+    placeholder: defaultPlaceholder,
+  },
+})

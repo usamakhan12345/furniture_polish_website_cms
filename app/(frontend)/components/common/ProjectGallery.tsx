@@ -11,6 +11,7 @@ interface GridImageItem {
 }
 
 export interface ProjectGalleryProps {
+  anchorId?: string
   subheading?: string
   heading: string
   description: string
@@ -19,6 +20,7 @@ export interface ProjectGalleryProps {
 }
 
 export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
+  anchorId,
   subheading,
   heading,
   description,
@@ -29,7 +31,7 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
   const mainImgAlt = typeof mainImage === 'object' && mainImage?.alt ? mainImage.alt : 'Featured Project'
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'project-gallery'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
       {/* Decorative background glow */}
       <div className="absolute top-1/3 right-1/4 w-[350px] h-[350px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 

@@ -15,6 +15,7 @@ interface CTA {
 }
 
 export interface HomeBannerProps {
+  anchorId?: string
   heading: string
   subHeading?: string
   description?: string
@@ -25,6 +26,7 @@ export interface HomeBannerProps {
 }
 
 export const HomeBanner: React.FC<HomeBannerProps> = ({
+  anchorId,
   heading,
   subHeading,
   description,
@@ -38,7 +40,7 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
   const videoUrl = typeof backgroundVideo === 'object' && backgroundVideo?.url ? backgroundVideo.url : ''
 
   return (
-    <section className="relative min-h-[95vh] flex items-center justify-start overflow-hidden py-32 bg-[#18110B]">
+    <section id={anchorId || 'home'} className="relative min-h-[95vh] flex items-center justify-start overflow-hidden py-32 bg-[#18110B]">
       {/* Background Video / Image Selector */}
       {videoUrl ? (
         <div className="absolute inset-0 z-0">

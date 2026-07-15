@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { imageHelper } from '../fields/helpers'
+import { imageHelper, anchorIdHelper } from '../fields/helpers'
 
 export const WhoWeAreBlock: Block = {
   slug: 'WhoWeAre',
@@ -8,6 +8,7 @@ export const WhoWeAreBlock: Block = {
     plural: 'Who We Are Sections',
   },
   fields: [
+    anchorIdHelper('who-we-are'),
     {
       name: 'subheading',
       type: 'text',

@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { imageHelper } from '../fields/helpers'
+import { imageHelper, anchorIdHelper } from '../fields/helpers'
 
 export const KeyImpactsBlock: Block = {
   slug: 'KeyImpacts',
@@ -8,6 +8,7 @@ export const KeyImpactsBlock: Block = {
     plural: 'Key Impacts Sections',
   },
   fields: [
+    anchorIdHelper('key-impacts'),
     {
       name: 'heading',
       type: 'text',

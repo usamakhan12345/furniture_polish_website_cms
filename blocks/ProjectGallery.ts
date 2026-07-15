@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { imageHelper } from '../fields/helpers'
+import { imageHelper, anchorIdHelper } from '../fields/helpers'
 
 export const ProjectGalleryBlock: Block = {
   slug: 'ProjectGallery',
@@ -8,6 +8,7 @@ export const ProjectGalleryBlock: Block = {
     plural: 'Project Gallery Sections',
   },
   fields: [
+    anchorIdHelper('project-gallery'),
     {
       name: 'subheading',
       type: 'text',

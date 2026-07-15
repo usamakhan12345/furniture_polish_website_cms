@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import '../globals.css'
 import { Header } from './components/common/Header'
 import { Footer } from './components/common/Footer'
+import { HashScrollHandler } from './components/common/HashScrollHandler'
+import { ScrollToTop } from './components/common/ScrollToTop'
 import { getHeader, getFooter } from '../../utilities/api'
 import React from 'react'
 
@@ -32,6 +34,8 @@ export default async function AppLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} scroll-smooth`}>
       <body className="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+        <HashScrollHandler />
+        <ScrollToTop />
         <Header data={headerData} />
         {/* Padding-top to avoid content hiding behind fixed header */}
         <main className="flex-grow pt-20">

@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { imageHelper, ctaHelper } from '../fields/helpers'
+import { imageHelper, ctaHelper, anchorIdHelper } from '../fields/helpers'
 
 export const FeaturedPostBlock: Block = {
   slug: 'FeaturedPost',
@@ -8,6 +8,7 @@ export const FeaturedPostBlock: Block = {
     plural: 'Featured Posts',
   },
   fields: [
+    anchorIdHelper('featured-post'),
     {
       name: 'heading',
       type: 'text',

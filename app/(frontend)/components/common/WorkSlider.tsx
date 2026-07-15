@@ -26,11 +26,13 @@ interface SlideItem {
 }
 
 export interface WorkSliderProps {
+  anchorId?: string
   heading: string
   slides: SlideItem[]
 }
 
 export const WorkSlider: React.FC<WorkSliderProps> = ({
+  anchorId,
   heading,
   slides,
 }) => {
@@ -66,7 +68,7 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
   }
 
   return (
-    <section id="portfolio" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#F5EBE0]/30 overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'portfolio'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#F5EBE0]/30 overflow-hidden border-t border-slate-200/50">
       {/* Wood Glow decoration */}
       <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none animate-pulse-glow" />
 

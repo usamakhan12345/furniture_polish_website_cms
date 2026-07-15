@@ -13,18 +13,20 @@ interface ImpactCardItem {
 }
 
 export interface KeyImpactsProps {
+  anchorId?: string
   heading: string
   description: string
   impacts?: ImpactCardItem[]
 }
 
 export const KeyImpacts: React.FC<KeyImpactsProps> = ({
+  anchorId,
   heading,
   description,
   impacts,
 }) => {
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'key-impacts'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
       {/* Decorative background blur */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[350px] h-[350px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 

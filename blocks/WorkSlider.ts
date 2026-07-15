@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { imageHelper, ctaHelper } from '../fields/helpers'
+import { imageHelper, ctaHelper, anchorIdHelper } from '../fields/helpers'
 
 export const WorkSliderBlock: Block = {
   slug: 'WorkSlider',
@@ -8,6 +8,7 @@ export const WorkSliderBlock: Block = {
     plural: 'Work Sliders',
   },
   fields: [
+    anchorIdHelper('portfolio'),
     {
       name: 'heading',
       type: 'text',

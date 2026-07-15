@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { imageHelper } from '../fields/helpers'
+import { imageHelper, anchorIdHelper } from '../fields/helpers'
 
 export const FeedbackSectionBlock: Block = {
   slug: 'FeedbackSection',
@@ -8,6 +8,7 @@ export const FeedbackSectionBlock: Block = {
     plural: 'Feedback Sections',
   },
   fields: [
+    anchorIdHelper('feedback'),
     {
       name: 'heading',
       type: 'text',

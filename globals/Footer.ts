@@ -20,9 +20,27 @@ export const Footer: GlobalConfig = {
           required: true,
         },
         {
+          name: 'isExternal',
+          type: 'checkbox',
+          label: 'Is External / Section Anchor?',
+          defaultValue: false,
+        },
+        {
           name: 'link',
           type: 'text',
-          required: true,
+          label: 'External URL or Anchor ID (e.g. #portfolio)',
+          admin: {
+            condition: (data, siblingData) => siblingData?.isExternal === true,
+          },
+        },
+        {
+          name: 'page',
+          type: 'relationship',
+          relationTo: 'pages',
+          label: 'Internal Page Link',
+          admin: {
+            condition: (data, siblingData) => siblingData?.isExternal !== true,
+          },
         },
       ],
     },
@@ -48,9 +66,27 @@ export const Footer: GlobalConfig = {
               required: true,
             },
             {
+              name: 'isExternal',
+              type: 'checkbox',
+              label: 'Is External / Section Anchor?',
+              defaultValue: false,
+            },
+            {
               name: 'link',
               type: 'text',
-              required: true,
+              label: 'External URL or Anchor ID (e.g. #portfolio)',
+              admin: {
+                condition: (data, siblingData) => siblingData?.isExternal === true,
+              },
+            },
+            {
+              name: 'page',
+              type: 'relationship',
+              relationTo: 'pages',
+              label: 'Internal Page Link',
+              admin: {
+                condition: (data, siblingData) => siblingData?.isExternal !== true,
+              },
             },
           ],
         },

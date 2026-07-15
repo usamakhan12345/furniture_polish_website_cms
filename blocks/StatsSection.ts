@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { ctaHelper } from '../fields/helpers'
+import { ctaHelper, anchorIdHelper } from '../fields/helpers'
 
 export const StatsSectionBlock: Block = {
   slug: 'StatsSection',
@@ -8,6 +8,7 @@ export const StatsSectionBlock: Block = {
     plural: 'Stats Sections',
   },
   fields: [
+    anchorIdHelper('stats'),
     {
       name: 'subheading',
       type: 'text',

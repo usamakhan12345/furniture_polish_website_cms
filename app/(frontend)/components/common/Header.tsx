@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react'
 import { getCtaHref } from '../../../../utilities/cta'
+import { animateScrollToTop, animateScrollToY } from '../../../../utilities/scroll'
 
 interface Media {
   url?: string
@@ -38,6 +39,14 @@ export interface HeaderProps {
   } | null
 }
 
+// Utility to resolve smooth anchor navigation across different page slugs
+const resolveNavLink = (href: string, pathname: string) => {
+  if (href.startsWith('#')) {
+    return pathname === '/' ? href : `/${href}`
+  }
+  return href
+}
+
 export const Header: React.FC<HeaderProps> = ({ data }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [visible, setVisible] = useState(true)
@@ -65,17 +74,49 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
   const logoUrl = typeof data.logo === 'object' && data.logo?.url ? data.logo.url : ''
   const logoAlt = typeof data.logo === 'object' && data.logo?.alt ? data.logo.alt : 'Logo'
 
+  // Intercept click on same-page anchor tags to enforce smooth scroll
+  const handleScrollClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // If clicking home/logo while already on home page, scroll to top smoothly
+    if (href === '/' || href === '#home') {
+      if (pathname === '/') {
+        e.preventDefault()
+        animateScrollToTop(1200) // Custom slow scroll to top
+        window.history.pushState(null, '', '/')
+        setMobileMenuOpen(false)
+        return
+      }
+    }
+
+    if (href.startsWith('#')) {
+      const id = decodeURIComponent(href.substring(1))
+      const element = document.getElementById(id)
+      if (element) {
+        e.preventDefault()
+        const headerOffset = 112 // Height of the fixed header on desktop (h-28)
+        const elementPosition = element.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.scrollY - headerOffset
+        animateScrollToY(offsetPosition, 1200) // Custom slow scroll to Y coordinate
+        window.history.pushState(null, '', href)
+        setMobileMenuOpen(false)
+      }
+    }
+  }
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 bg-[#18110B]/90 backdrop-blur-lg border-b border-amber-950/15 transition-all duration-300 ease-in-out ${
       visible ? 'translate-y-0' : '-translate-y-full'
     }`}>
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
-        {/* Increased Top and Bottom Spacing: h-24 on mobile, md:h-28 on desktop */}
+        {/* Increased Top and Bottom Spacing */}
         <div className="flex items-center justify-between h-24 md:h-28">
           
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center group">
+            <Link
+              href="/"
+              onClick={(e) => handleScrollClick(e, '/')}
+              className="flex items-center group"
+            >
               {logoUrl ? (
                 <img src={logoUrl} alt={logoAlt} className="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
               ) : (
@@ -91,11 +132,13 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
             {data.navigationMenu?.map((item, idx) => {
               // Active Link Matching Logic
               const isActive = pathname === item.link || (item.link !== '/' && pathname.startsWith(item.link))
+              const resolvedHref = resolveNavLink(item.link, pathname)
 
               return (
                 <div key={item.id || idx} className="relative group/nav py-4 flex items-center h-full">
                   <Link
-                    href={item.link}
+                    href={resolvedHref}
+                    onClick={(e) => handleScrollClick(e, resolvedHref)}
                     className={`text-base font-bold transition-colors duration-300 flex items-center gap-1 py-2 ${
                       isActive ? 'text-amber-400 font-extrabold' : 'text-amber-100/90 hover:text-amber-400'
                     }`}
@@ -116,10 +159,12 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
                     <div className="absolute top-[85%] left-0 mt-2 w-52 bg-[#18110B] border border-amber-950/20 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 transform translate-y-2 group-hover/nav:translate-y-0 z-50">
                       {item.subMenu.map((sub, sIdx) => {
                         const isSubActive = pathname === sub.link
+                        const subResolvedHref = resolveNavLink(sub.link, pathname)
                         return (
                           <Link
                             key={sIdx}
-                            href={sub.link}
+                            href={subResolvedHref}
+                            onClick={(e) => handleScrollClick(e, subResolvedHref)}
                             className={`block px-5 py-2.5 text-sm font-bold transition-colors duration-200 ${
                               isSubActive ? 'text-amber-400 bg-white/5' : 'text-amber-100/80 hover:text-amber-400 hover:bg-white/5'
                             }`}
@@ -168,12 +213,14 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
           <nav className="flex flex-col space-y-3">
             {data.navigationMenu?.map((item, idx) => {
               const isActive = pathname === item.link
+              const resolvedHref = resolveNavLink(item.link, pathname)
 
               return (
                 <div key={item.id || idx} className="flex flex-col space-y-1">
                   <Link
-                    href={item.link}
-                    onClick={() => {
+                    href={resolvedHref}
+                    onClick={(e) => {
+                      handleScrollClick(e, resolvedHref)
                       if (!item.subMenu || item.subMenu.length === 0) {
                         setMobileMenuOpen(false)
                       }
@@ -190,11 +237,15 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
                     <div className="pl-6 flex flex-col space-y-2 border-l border-amber-950/15 py-1">
                       {item.subMenu.map((sub, sIdx) => {
                         const isSubActive = pathname === sub.link
+                        const subResolvedHref = resolveNavLink(sub.link, pathname)
                         return (
                           <Link
                             key={sIdx}
-                            href={sub.link}
-                            onClick={() => setMobileMenuOpen(false)}
+                            href={subResolvedHref}
+                            onClick={(e) => {
+                              handleScrollClick(e, subResolvedHref)
+                              setMobileMenuOpen(false)
+                            }}
                             className={`text-sm font-semibold p-1.5 transition-colors ${
                               isSubActive ? 'text-amber-400 font-bold' : 'text-amber-100/60 hover:text-amber-400'
                             }`}

@@ -16,6 +16,7 @@ interface ServiceCardItem {
 }
 
 export interface ServicesProps {
+  anchorId?: string
   subheading?: string
   heading: string
   description: string
@@ -25,6 +26,7 @@ export interface ServicesProps {
 }
 
 export const Services: React.FC<ServicesProps> = ({
+  anchorId,
   subheading,
   heading,
   description,
@@ -33,7 +35,7 @@ export const Services: React.FC<ServicesProps> = ({
   services,
 }) => {
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF6EE]/30 overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'services'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF6EE]/30 overflow-hidden border-t border-slate-200/50">
       {/* Decorative background glow */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[350px] h-[350px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 

@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { imageHelper } from '../fields/helpers'
+import { imageHelper, anchorIdHelper } from '../fields/helpers'
 
 export const ServicesBlock: Block = {
   slug: 'Services',
@@ -8,6 +8,7 @@ export const ServicesBlock: Block = {
     plural: 'Services Sections',
   },
   fields: [
+    anchorIdHelper('services'),
     {
       name: 'subheading',
       type: 'text',

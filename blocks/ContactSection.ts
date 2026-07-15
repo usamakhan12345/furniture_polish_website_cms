@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { anchorIdHelper } from '../fields/helpers'
 
 export const ContactSectionBlock: Block = {
   slug: 'ContactSection',
@@ -7,6 +8,7 @@ export const ContactSectionBlock: Block = {
     plural: 'Contact Sections',
   },
   fields: [
+    anchorIdHelper('contact'),
     {
       name: 'heading',
       type: 'text',

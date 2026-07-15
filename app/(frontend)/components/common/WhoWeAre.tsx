@@ -21,6 +21,7 @@ interface HighlightItem {
 }
 
 export interface WhoWeAreProps {
+  anchorId?: string
   subheading?: string
   heading: string
   description1: string
@@ -31,6 +32,7 @@ export interface WhoWeAreProps {
 }
 
 export const WhoWeAre: React.FC<WhoWeAreProps> = ({
+  anchorId,
   subheading,
   heading,
   description1,
@@ -46,7 +48,7 @@ export const WhoWeAre: React.FC<WhoWeAreProps> = ({
   const c2ImgAlt = typeof card2?.image === 'object' && card2?.image?.alt ? card2.image.alt : 'Card 2 Image'
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'who-we-are'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
       {/* Decorative Glow background blur */}
       <div className="absolute top-1/3 right-0 w-[350px] h-[350px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
 

@@ -10,12 +10,14 @@ interface FAQItem {
 }
 
 export interface FAQSectionProps {
+  anchorId?: string
   heading: string
   description?: string
   questions: FAQItem[]
 }
 
 export const FAQSection: React.FC<FAQSectionProps> = ({
+  anchorId,
   heading,
   description,
   questions,
@@ -29,7 +31,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
   if (!questions || questions.length === 0) return null
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'faq'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
       {/* Glow effect */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[350px] h-[350px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 

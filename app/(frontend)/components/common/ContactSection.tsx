@@ -14,6 +14,7 @@ interface WhatsappItem {
 }
 
 export interface ContactSectionProps {
+  anchorId?: string
   heading: string
   description?: string
   phoneNumbers?: PhoneItem[]
@@ -27,6 +28,7 @@ export interface ContactSectionProps {
 }
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
+  anchorId,
   heading,
   description,
   phoneNumbers,
@@ -83,7 +85,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   // Resolve Map URLs dynamically for public iframe embeds
   let embedUrl = ''
   if (mapUrl) {
-    if (mapUrl.includes('embed') || mapUrl.includes('output=embed')) {
+    if (mapUrl.includes('<iframe') && mapUrl.includes('src="')) {
+      const match = mapUrl.match(/src="([^"]+)"/)
+      embedUrl = match ? match[1] : mapUrl
+    } else if (mapUrl.includes('embed') || mapUrl.includes('output=embed')) {
       embedUrl = mapUrl
     } else {
       embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(mapUrl)}&output=embed`
@@ -93,7 +98,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   }
 
   return (
-    <section id="contact" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'contact'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
       {/* Glow Effect */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
 

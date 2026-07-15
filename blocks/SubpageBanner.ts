@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { imageHelper, ctaHelper } from '../fields/helpers'
+import { imageHelper, ctaHelper, anchorIdHelper } from '../fields/helpers'
 
 export const SubpageBannerBlock: Block = {
   slug: 'SubpageBanner',
@@ -8,6 +8,7 @@ export const SubpageBannerBlock: Block = {
     plural: 'Subpage Banner Sections',
   },
   fields: [
+    anchorIdHelper('subpage-banner'),
     {
       name: 'heading',
       type: 'text',

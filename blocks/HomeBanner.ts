@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { imageHelper, ctaHelper } from '../fields/helpers'
+import { imageHelper, ctaHelper, anchorIdHelper } from '../fields/helpers'
 
 export const HomeBannerBlock: Block = {
   slug: 'HomeBanner',
@@ -8,6 +8,7 @@ export const HomeBannerBlock: Block = {
     plural: 'Home Banners',
   },
   fields: [
+    anchorIdHelper('home'),
     {
       name: 'heading',
       type: 'text',

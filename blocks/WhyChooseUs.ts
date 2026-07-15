@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { imageHelper } from '../fields/helpers'
+import { imageHelper, anchorIdHelper } from '../fields/helpers'
 
 export const WhyChooseUsBlock: Block = {
   slug: 'WhyChooseUs',
@@ -8,6 +8,7 @@ export const WhyChooseUsBlock: Block = {
     plural: 'Why Choose Us Sections',
   },
   fields: [
+    anchorIdHelper('why-choose-us'),
     {
       name: 'subheading',
       type: 'text',

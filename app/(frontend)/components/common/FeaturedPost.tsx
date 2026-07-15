@@ -15,6 +15,7 @@ interface CTA {
 }
 
 export interface FeaturedPostProps {
+  anchorId?: string
   heading: string
   content: string
   image: Media | string | null
@@ -22,6 +23,7 @@ export interface FeaturedPostProps {
 }
 
 export const FeaturedPost: React.FC<FeaturedPostProps> = ({
+  anchorId,
   heading,
   content,
   image,
@@ -31,7 +33,7 @@ export const FeaturedPost: React.FC<FeaturedPostProps> = ({
   const imgAlt = typeof image === 'object' && image?.alt ? image.alt : 'Featured Post Image'
 
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-700 overflow-hidden border-t border-amber-500/10">
+    <section id={anchorId || 'featured-post'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-700 overflow-hidden border-t border-amber-500/10">
       {/* Decorative Blur */}
       <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-white/10 rounded-full blur-[100px] pointer-events-none animate-pulse-glow" />
 
