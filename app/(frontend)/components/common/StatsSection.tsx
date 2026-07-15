@@ -34,7 +34,7 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
 }) => {
   return (
     <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#FAF6EE] via-[#FDFBF7] to-[#F5EBE0] overflow-hidden border-t border-amber-950/5">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+      <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
         
         {/* Left Side Info */}
         <div className="lg:col-span-7 flex flex-col justify-center animate-fade-in-right">

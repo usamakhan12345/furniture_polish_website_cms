@@ -32,7 +32,7 @@ export const ReadyToBuild: React.FC<ReadyToBuildProps> = ({
 
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-[1600px] mx-auto relative z-10">
         
         <div className="relative rounded-3xl overflow-hidden border border-slate-200 p-8 sm:p-12 lg:p-16 bg-[#F5EBE0]/30 backdrop-blur-sm shadow-sm text-center flex flex-col items-center">
           

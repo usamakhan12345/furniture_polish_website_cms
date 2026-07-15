@@ -35,7 +35,7 @@ export const FeaturedPost: React.FC<FeaturedPostProps> = ({
       {/* Decorative Blur */}
       <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-white/10 rounded-full blur-[100px] pointer-events-none animate-pulse-glow" />
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+      <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
         {/* Text Column */}
         <div className="lg:col-span-6 flex flex-col justify-center order-2 lg:order-1 animate-fade-in-right">
           <span className="text-amber-100 font-bold text-sm tracking-wider uppercase mb-3 block">

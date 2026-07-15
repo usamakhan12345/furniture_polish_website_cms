@@ -12,10 +12,17 @@ export const FeedbackSectionBlock: Block = {
       name: 'heading',
       type: 'text',
       required: true,
+      label: 'Section Heading (e.g. What Our Client Says.)',
     },
     {
       name: 'subheading',
       type: 'text',
+      label: 'Subheading (Optional)',
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+      label: 'Subheading Description Paragraph text',
     },
     {
       name: 'testimonials',
@@ -31,7 +38,7 @@ export const FeedbackSectionBlock: Block = {
         {
           name: 'company',
           type: 'text',
-          label: 'Client Designation / Company',
+          label: 'Client Designation / Company (e.g. CEO)',
         },
         {
           name: 'title',
@@ -57,3 +64,4 @@ export const FeedbackSectionBlock: Block = {
     },
   ],
 }
+export default FeedbackSectionBlock

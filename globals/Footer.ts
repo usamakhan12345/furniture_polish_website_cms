@@ -7,11 +7,12 @@ export const Footer: GlobalConfig = {
     read: () => true,
   },
   fields: [
-    imageHelper('logo', 'Logo', false),
+    imageHelper('logo', 'Default Logo', false),
+    imageHelper('footerLogo', 'Footer Specific Logo (Optional)', false),
     {
       name: 'navigationLinks',
       type: 'array',
-      required: true,
+      label: 'Standard Navigation Links (Fallback)',
       fields: [
         {
           name: 'label',
@@ -22,6 +23,36 @@ export const Footer: GlobalConfig = {
           name: 'link',
           type: 'text',
           required: true,
+        },
+      ],
+    },
+    {
+      name: 'navigationGroups',
+      type: 'array',
+      label: 'Grouped Navigation Columns (Multi-Column Layout)',
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          required: true,
+          label: 'Column Title (e.g. Services, Quick Links)',
+        },
+        {
+          name: 'links',
+          type: 'array',
+          required: true,
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'link',
+              type: 'text',
+              required: true,
+            },
+          ],
         },
       ],
     },
@@ -69,6 +100,16 @@ export const Footer: GlobalConfig = {
           type: 'text',
         },
         {
+          name: 'whatsapp',
+          type: 'text',
+          label: 'WhatsApp Number (e.g. +92 300 1234567)',
+        },
+        {
+          name: 'officeHours',
+          type: 'text',
+          label: 'Office Working Hours (e.g. Mon - Sat: 9 AM - 6 PM)',
+        },
+        {
           name: 'address',
           type: 'textarea',
         },
@@ -76,3 +117,4 @@ export const Footer: GlobalConfig = {
     },
   ],
 }
+export default Footer

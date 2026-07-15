@@ -97,10 +97,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       {/* Glow Effect */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      <div className="max-w-[1600px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
         
         {/* Left Column: Details */}
-        <div className="lg:col-span-5 flex flex-col justify-center animate-fade-in-right">
+        <div className="flex flex-col justify-center animate-fade-in-right">
           <span className="text-amber-600 font-bold text-sm tracking-wider uppercase mb-2 block">
             Get in Touch
           </span>
@@ -108,17 +108,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             {heading}
           </h2>
           {description && (
-            <p className="text-slate-600 text-base leading-relaxed mb-10 font-medium">
+            <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-10 font-medium max-w-xl">
               {description}
             </p>
           )}
 
-          {/* Contact Cards */}
-          <div className="space-y-6">
+          {/* Contact Cards: 3-column layout on tablet/medium screens to prevent stretching down */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-6">
             
             {/* Phones Card */}
-            <div className="flex gap-4 p-5 rounded-2xl bg-[#FDFBF9] border border-slate-200 hover:border-amber-500/20 transition-all duration-300">
-              <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-600 self-start">
+            <div className="flex gap-4 p-5 rounded-2xl bg-[#FDFBF9] border border-slate-200 hover:border-amber-500/20 hover:scale-[1.02] hover:shadow-md transition-all duration-300 group/card">
+              <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-600 self-start group-hover/card:bg-amber-500/20 group-hover/card:scale-110 transition-all duration-300">
                 <Phone className="w-6 h-6" />
               </div>
               <div className="flex flex-col">
@@ -136,8 +136,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             </div>
 
             {/* WhatsApp Card */}
-            <div className="flex gap-4 p-5 rounded-2xl bg-[#FDFBF9] border border-slate-200 hover:border-emerald-500/20 transition-all duration-300">
-              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-600 self-start">
+            <div className="flex gap-4 p-5 rounded-2xl bg-[#FDFBF9] border border-slate-200 hover:border-emerald-500/20 hover:scale-[1.02] hover:shadow-md transition-all duration-300 group/card">
+              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-600 self-start group-hover/card:bg-emerald-500/20 group-hover/card:scale-110 transition-all duration-300">
                 <MessageSquare className="w-6 h-6" />
               </div>
               <div className="flex flex-col">
@@ -160,11 +160,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             {location && (
               <div 
                 onClick={() => embedUrl && setIsMapOpen(true)}
-                className={`flex gap-4 p-5 rounded-2xl bg-[#FDFBF9] border border-slate-200 hover:border-amber-500/20 transition-all duration-300 ${
+                className={`flex gap-4 p-5 rounded-2xl bg-[#FDFBF9] border border-slate-200 hover:border-indigo-500/20 hover:scale-[1.02] hover:shadow-md transition-all duration-300 group/card ${
                   embedUrl ? 'cursor-pointer' : ''
                 }`}
               >
-                <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-500 self-start">
+                <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-500 self-start group-hover/card:bg-indigo-500/20 group-hover/card:scale-110 transition-all duration-300">
                   <MapPin className="w-6 h-6" />
                 </div>
                 <div className="flex flex-col">
@@ -183,7 +183,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         </div>
 
         {/* Right Column: Inquiry Form */}
-        <div className="lg:col-span-7 bg-[#FAF6EE]/50 border border-slate-200 backdrop-blur-sm rounded-3xl p-8 sm:p-10 shadow-sm animate-fade-in-up">
+        <div className="bg-[#FAF6EE]/50 border border-slate-200 backdrop-blur-sm rounded-3xl p-8 sm:p-10 shadow-sm hover:shadow-md transition-all duration-300 animate-fade-in-up">
           <h3 className="text-2xl font-bold text-slate-900 mb-8">Send Us a Message</h3>
           
           {status === 'success' ? (
@@ -245,7 +245,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-xl shadow-lg disabled:opacity-50 transition-all duration-200"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-xl shadow-lg disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200"
               >
                 {status === 'loading' ? (
                   <>

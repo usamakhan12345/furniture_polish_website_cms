@@ -27,6 +27,26 @@ export const Header: GlobalConfig = {
             placeholder: 'e.g. /about or https://...',
           },
         },
+        {
+          name: 'subMenu',
+          type: 'array',
+          label: 'Submenu Links (Optional)',
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'link',
+              type: 'text',
+              required: true,
+              admin: {
+                placeholder: 'e.g. /services or #portfolio',
+              },
+            },
+          ],
+        },
       ],
     },
     ctaHelper('ctaButton', 'CTA Button'),
@@ -55,3 +75,4 @@ export const Header: GlobalConfig = {
     },
   ],
 }
+export default Header

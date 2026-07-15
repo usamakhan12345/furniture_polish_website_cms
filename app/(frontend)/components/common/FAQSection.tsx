@@ -33,7 +33,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
       {/* Glow effect */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[350px] h-[350px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto relative z-10 animate-fade-in-up">
+      <div className="max-w-[1200px] mx-auto relative z-10 animate-fade-in-up">
         
         {/* Header */}
         <div className="text-center mb-16">

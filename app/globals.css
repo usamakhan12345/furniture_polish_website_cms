@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -6,6 +7,8 @@
   --accent-amber: #D97706; /* Amber Polish (Orange/Gold) */
   --accent-wood: #B45309; /* Warm Oak */
   --card-background: #FFFFFF; /* Pure White Card */
+  --font-headings: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
 }
 
 @theme inline {
@@ -14,15 +17,26 @@
   --color-accent-amber: var(--accent-amber);
   --color-accent-wood: var(--accent-wood);
   --color-card-background: var(--card-background);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
+  --font-headings: var(--font-headings);
   --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: linear-gradient(to bottom, #FAF6EE, #FDFBF9, #F5EBE0);
   color: var(--foreground);
+  font-family: var(--font-body);
   overflow-x: hidden;
   min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headings);
+  letter-spacing: -0.02em;
 }
 
 /* Keyframe Animations */

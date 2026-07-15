@@ -70,10 +70,10 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
       {/* Wood Glow decoration */}
       <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none animate-pulse-glow" />
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-[1600px] mx-auto relative z-10">
         
         {/* Header Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12 gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12 gap-6 px-3">
           <div>
             <span className="text-amber-600 font-bold text-sm tracking-wider uppercase mb-2 block animate-fade-in-right">
               Our Craftsmanship Portfolio
@@ -106,9 +106,9 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
         {/* Viewport */}
         <div className="overflow-hidden">
           <div
-            className="flex transition-transform duration-500 ease-out gap-6"
+            className="flex transition-transform duration-500 ease-out"
             style={{
-              transform: `translateX(calc(-${(current + slides.length) * (100 / itemsPerView)}% - ${(current + slides.length) * 24}px))`,
+              transform: `translateX(-${(current + slides.length) * (100 / itemsPerView)}%)`,
             }}
           >
             {displaySlides.map((slide, idx) => {
@@ -119,45 +119,47 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
               return (
                 <div
                   key={`${slide.id || idx}-${idx}`}
-                  className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-shrink-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 wood-card-hover"
+                  className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-3"
                 >
-                  {/* Card Image */}
-                  <div className="aspect-[16/10] w-full overflow-hidden relative group border-b border-slate-100">
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent z-10" />
-                    {imgUrl ? (
-                      <img
-                        src={imgUrl}
-                        alt={imgAlt}
-                        className="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-500 ease-out"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400">
-                        No image uploaded
-                      </div>
-                    )}
-                  </div>
+                  <div className="flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 wood-card-hover h-full">
+                    {/* Card Image (Height minimized to aspect-[2/1]) */}
+                    <div className="aspect-[2/1] w-full overflow-hidden relative group border-b border-slate-100">
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent z-10" />
+                      {imgUrl ? (
+                        <img
+                          src={imgUrl}
+                          alt={imgAlt}
+                          className="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400">
+                          No image uploaded
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Card Body */}
-                  <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-lg font-bold text-slate-900 mb-2">
-                      {slide.title}
-                    </h3>
-                    {slide.description && (
-                      <p className="text-slate-600 mb-4 line-clamp-2 leading-relaxed text-xs font-medium">
-                        {slide.description}
-                      </p>
-                    )}
-                    {slide.cta?.text && ctaUrl && ctaUrl !== '#' && (
-                      <div className="mt-auto pt-2">
-                        <Link
-                          href={ctaUrl}
-                          className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 hover:text-amber-500 transition-colors duration-200"
-                        >
-                          <span>{slide.cta.text}</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                      </div>
-                    )}
+                    {/* Card Body (Increased headings & description font sizes) */}
+                    <div className="p-8 flex flex-col flex-grow">
+                      <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-3 tracking-tight">
+                        {slide.title}
+                      </h3>
+                      {slide.description && (
+                        <p className="text-slate-700 text-sm sm:text-base mb-6 leading-relaxed font-medium line-clamp-3">
+                          {slide.description}
+                        </p>
+                      )}
+                      {slide.cta?.text && ctaUrl && ctaUrl !== '#' && (
+                        <div className="mt-auto pt-2">
+                          <Link
+                            href={ctaUrl}
+                            className="inline-flex items-center gap-1.5 text-sm font-bold text-amber-600 hover:text-amber-500 transition-colors duration-200"
+                          >
+                            <span>{slide.cta.text}</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )
