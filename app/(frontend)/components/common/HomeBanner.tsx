@@ -40,7 +40,7 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
   const videoUrl = typeof backgroundVideo === 'object' && backgroundVideo?.url ? backgroundVideo.url : ''
 
   return (
-    <section id={anchorId || 'home'} className="relative min-h-[95vh] flex items-center justify-start overflow-hidden py-32 bg-[#18110B]">
+    <section id={anchorId || 'home'} className="relative min-h-[75vh] lg:min-h-[85vh] flex items-center justify-start overflow-hidden py-20 lg:py-28 bg-[#18110B]">
       {/* Background Video / Image Selector */}
       {videoUrl ? (
         <div className="absolute inset-0 z-0">
@@ -78,12 +78,12 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
           </span>
         )}
 
-        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold text-white tracking-tight leading-tight mb-8 max-w-4xl drop-shadow-md animate-fade-in-up">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6 max-w-4xl drop-shadow-md animate-fade-in-up">
           {heading}
         </h1>
 
         {description && (
-          <p className="text-lg sm:text-xl lg:text-2xl text-slate-300 max-w-2xl leading-relaxed mb-12 font-medium animate-fade-in-up delay-100">
+          <p className="text-base sm:text-lg lg:text-xl text-slate-300 max-w-2xl leading-relaxed mb-8 font-medium animate-fade-in-up delay-100">
             {description}
           </p>
         )}

@@ -80,7 +80,7 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
     }`}>
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
         {/* Increased Top and Bottom Spacing */}
-        <div className="flex items-center justify-between h-24 md:h-28">
+        <div className="flex items-center justify-between h-20 md:h-24">
           
           {/* Logo */}
           <div className="flex-shrink-0">

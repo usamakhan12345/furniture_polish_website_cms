@@ -35,7 +35,7 @@ export const SubpageBanner: React.FC<SubpageBannerProps> = ({
   const imgAlt = typeof image === 'object' && image?.alt ? image.alt : 'Background Image'
 
   return (
-    <section id={anchorId || 'subpage-banner'} className="relative min-h-[55vh] flex items-center justify-start py-32 bg-[#FAF6EE] overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'subpage-banner'} className="relative min-h-[45vh] lg:min-h-[50vh] flex items-center justify-start py-20 lg:py-24 bg-[#FAF6EE] overflow-hidden border-t border-slate-200/50">
       
       {/* Background Image & Light Overlay */}
       {imgUrl ? (
@@ -56,11 +56,11 @@ export const SubpageBanner: React.FC<SubpageBannerProps> = ({
       {/* Content Container (Left-aligned, Light Theme text) */}
       <div className="relative max-w-[1600px] mx-auto w-full z-20 text-left px-4 sm:px-6 flex flex-col items-start">
         
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6 max-w-3xl animate-fade-in-right">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6 max-w-3xl animate-fade-in-right">
           {heading}
         </h1>
 
-        <p className="text-slate-600 text-lg sm:text-xl leading-relaxed mb-10 font-medium max-w-2xl whitespace-pre-line animate-fade-in-up">
+        <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-10 font-medium max-w-2xl whitespace-pre-line animate-fade-in-up">
           {description}
         </p>
 

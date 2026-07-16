@@ -31,14 +31,14 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
   const mainImgAlt = typeof mainImage === 'object' && mainImage?.alt ? mainImage.alt : 'Featured Project'
 
   return (
-    <section id={anchorId || 'project-gallery'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
+    <section id={anchorId || 'project-gallery'} className="relative py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
       {/* Decorative background glow */}
       <div className="absolute top-1/3 right-1/4 w-[350px] h-[350px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-[1600px] mx-auto relative z-10">
         
         {/* Header */}
-        <div className="mb-16 animate-fade-in-right max-w-4xl text-left px-2">
+        <div className="mb-12 animate-fade-in-right max-w-4xl text-left px-2">
           {/* Subheading with Orange Colon */}
           {subheading && (
             <span className="inline-flex items-center text-amber-600 font-extrabold text-sm uppercase tracking-widest gap-2.5 mb-5">
@@ -55,59 +55,55 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
           </p>
         </div>
 
-        {/* Asymmetric Gallery Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        {/* Unified Gallery Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           
-          {/* Left Column: Large Featured Image */}
-          <div className="lg:col-span-6 animate-fade-in-right">
+          {/* Left Column: Large Featured Image Card (Spans 2 cols & 2 rows on tablet/desktop) */}
+          <div className="sm:col-span-2 sm:row-span-2 animate-fade-in-right flex">
             {mainImgUrl ? (
-              <div className="relative h-full w-full rounded-3xl overflow-hidden shadow-sm border border-slate-200/60 group aspect-[4/3] lg:aspect-auto">
+              <div className="relative h-full w-full rounded-3xl overflow-hidden shadow-sm border border-slate-200/60 group aspect-[4/3] sm:aspect-auto flex">
                 <img
                   src={mainImgUrl}
                   alt={mainImgAlt}
-                  className="w-full h-full object-cover transform group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                  className="w-full h-full object-cover transform group-hover:scale-[1.02] transition-transform duration-700 ease-out flex-grow"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent z-10 pointer-events-none" />
               </div>
             ) : (
-              <div className="h-96 lg:h-full w-full rounded-3xl bg-slate-100 flex items-center justify-center text-slate-400 border border-slate-200">
-                No Featured Image Uploaded
+              <div className="aspect-[4/3] sm:aspect-auto sm:h-full w-full rounded-3xl bg-slate-100 flex items-center justify-center text-slate-400 border border-slate-200 flex-grow">
+                No Featured Wood Restoration Image
               </div>
             )}
           </div>
 
-          {/* Right Column: 2x2 Grid of Smaller Square Images */}
-          <div className="lg:col-span-6 animate-fade-in-up">
-            <div className="grid grid-cols-2 gap-6 h-full">
-              {Array.from({ length: 4 }).map((_, idx) => {
-                const item = gridImages?.[idx]
-                const itemImgUrl = typeof item?.image === 'object' && item?.image?.url ? item.image.url : ''
-                const itemImgAlt = typeof item?.image === 'object' && item?.image?.alt ? item.image.alt : `Gallery Image ${idx + 1}`
+          {/* Right Column: Smaller Grid Images (Flow smoothly next to or below the featured card) */}
+          {Array.from({ length: 4 }).map((_, idx) => {
+            const item = gridImages?.[idx]
+            const itemImgUrl = typeof item?.image === 'object' && item?.image?.url ? item.image.url : ''
+            const itemImgAlt = typeof item?.image === 'object' && item?.image?.alt ? item.image.alt : `Gallery Image ${idx + 1}`
 
-                return (
-                  <div
-                    key={item?.id || idx}
-                    className="relative aspect-square w-full rounded-2xl overflow-hidden group shadow-sm border border-slate-200/50 bg-slate-50"
-                  >
-                    {itemImgUrl ? (
-                      <>
-                        <img
-                          src={itemImgUrl}
-                          alt={itemImgAlt}
-                          className="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-500 ease-out"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/10 via-transparent to-transparent z-10 pointer-events-none" />
-                      </>
-                    ) : (
-                      <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs">
-                        Image Box {idx + 1}
-                      </div>
-                    )}
+            return (
+              <div
+                key={item?.id || idx}
+                className="relative aspect-[3/2] w-full rounded-2xl overflow-hidden group shadow-sm border border-slate-200/50 bg-slate-50 animate-fade-in-up"
+              >
+                {itemImgUrl ? (
+                  <>
+                    <img
+                      src={itemImgUrl}
+                      alt={itemImgAlt}
+                      className="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/10 via-transparent to-transparent z-10 pointer-events-none" />
+                  </>
+                ) : (
+                  <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs">
+                    Showcase Photo {idx + 1}
                   </div>
-                )
-              })}
-            </div>
-          </div>
+                )}
+              </div>
+            )
+          })}
 
         </div>
 
@@ -115,4 +111,5 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
     </section>
   )
 }
+
 export default ProjectGallery

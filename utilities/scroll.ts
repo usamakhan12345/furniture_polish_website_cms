@@ -63,7 +63,7 @@ export const handleSmoothScrollClick = (
     const element = document.getElementById(id)
     if (element) {
       e.preventDefault()
-      const headerOffset = 112 // Height of the fixed header on desktop (h-28)
+      const headerOffset = 96 // Height of the fixed header on desktop (h-24)
       const elementPosition = element.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.scrollY - headerOffset
       animateScrollToY(offsetPosition, 1200) // Custom slow scroll to Y coordinate
