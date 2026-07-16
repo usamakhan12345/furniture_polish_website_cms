@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { animateScrollToTop, animateScrollToY } from '../../../../utilities/scroll'
+import { handleSmoothScrollClick } from '../../../../utilities/scroll'
 
 interface Media {
   url?: string
@@ -83,7 +83,7 @@ const getSocialIcon = (platform: string) => {
     case 'twitter':
       return (
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+          <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.095 4.095 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
         </svg>
       )
     case 'instagram':
@@ -129,32 +129,6 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
 
   const activeLinks = data.navigationLinks && data.navigationLinks.length > 0 ? data.navigationLinks : defaultLinks
 
-  // Intercept click on same-page anchor tags to enforce smooth scroll
-  const handleScrollClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    // If clicking home/logo while already on home page, scroll to top smoothly
-    if (href === '/' || href === '#home') {
-      if (pathname === '/') {
-        e.preventDefault()
-        animateScrollToTop(1200) // Custom slow scroll to top
-        window.history.pushState(null, '', '/')
-        return
-      }
-    }
-
-    if (href.startsWith('#')) {
-      const id = decodeURIComponent(href.substring(1))
-      const element = document.getElementById(id)
-      if (element) {
-        e.preventDefault()
-        const headerOffset = 112 // Height of the fixed header on desktop (h-28)
-        const elementPosition = element.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.scrollY - headerOffset
-        animateScrollToY(offsetPosition, 1200) // Custom slow scroll to Y coordinate
-        window.history.pushState(null, '', href)
-      }
-    }
-  }
-
   return (
     <footer className="bg-[#18110B] border-t border-amber-950/15 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
@@ -163,7 +137,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
         <div className="md:col-span-4 flex flex-col">
           <Link
             href="/"
-            onClick={(e) => handleScrollClick(e, '/')}
+            onClick={(e) => handleSmoothScrollClick(e, '/', pathname)}
             className="flex items-center mb-6"
           >
             {logoUrl ? (
@@ -209,7 +183,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
                     <li key={item.id || lIdx}>
                       <Link
                         href={resolvedHref}
-                        onClick={(e) => handleScrollClick(e, resolvedHref)}
+                        onClick={(e) => handleSmoothScrollClick(e, resolvedHref, pathname)}
                         className="text-slate-400 hover:text-white text-sm font-semibold transition-colors duration-200"
                       >
                         {item.label}
@@ -233,7 +207,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
                   <li key={item.id || idx}>
                     <Link
                       href={resolvedHref}
-                      onClick={(e) => handleScrollClick(e, resolvedHref)}
+                      onClick={(e) => handleSmoothScrollClick(e, resolvedHref, pathname)}
                       className="text-slate-400 hover:text-white text-sm font-semibold transition-colors duration-200"
                     >
                       {item.label}

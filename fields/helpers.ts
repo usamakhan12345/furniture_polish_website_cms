@@ -46,10 +46,10 @@ export const ctaHelper = (
     {
       name: 'link',
       type: 'text',
-      label: 'External Link URL',
+      label: 'External Link or Section ID',
       admin: {
         condition: (data, siblingData) => siblingData?.isExternal === true,
-        placeholder: 'e.g., https://example.com or /external-path',
+        placeholder: 'e.g., https://example.com or #services (for smooth scrolling)',
       },
     },
     {

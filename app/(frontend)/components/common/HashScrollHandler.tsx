@@ -7,6 +7,7 @@ import { animateScrollToY } from '../../../../utilities/scroll'
 export const HashScrollHandler: React.FC = () => {
   const pathname = usePathname()
 
+  // Handle route-based hash scrolls on initial page load / transition
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
       const hash = window.location.hash
@@ -28,4 +29,5 @@ export const HashScrollHandler: React.FC = () => {
 
   return null
 }
+
 export default HashScrollHandler

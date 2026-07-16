@@ -1,3 +1,5 @@
+import { MouseEvent } from 'react'
+
 /**
  * Animates viewport scrolling to a specific Y coordinate position smoothly with custom duration and easing.
  * Avoids the default browser "behavior: smooth" abrupt speed shifts on long pages.
@@ -32,4 +34,41 @@ export const animateScrollToY = (targetY: number, duration: number = 1200) => {
  */
 export const animateScrollToTop = (duration: number = 1200) => {
   animateScrollToY(0, duration)
+}
+
+/**
+ * Global React MouseEvent click interceptor to smooth scroll anchor jumps.
+ * Works perfectly inside Next.js <Link> tags to cancel native jumps.
+ */
+export const handleSmoothScrollClick = (
+  e: MouseEvent<HTMLAnchorElement>,
+  href: string,
+  pathname: string,
+  onComplete?: () => void
+) => {
+  // If clicking home/logo while already on home page, scroll to top smoothly
+  if (href === '/' || href === '#home') {
+    if (pathname === '/') {
+      e.preventDefault()
+      animateScrollToTop(1200)
+      window.history.pushState(null, '', '/')
+      if (onComplete) onComplete()
+      return
+    }
+  }
+
+  // Handle in-page smooth section scrolling (must start with #)
+  if (href.startsWith('#')) {
+    const id = decodeURIComponent(href.substring(1))
+    const element = document.getElementById(id)
+    if (element) {
+      e.preventDefault()
+      const headerOffset = 112 // Height of the fixed header on desktop (h-28)
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.scrollY - headerOffset
+      animateScrollToY(offsetPosition, 1200) // Custom slow scroll to Y coordinate
+      window.history.pushState(null, '', href)
+      if (onComplete) onComplete()
+    }
+  }
 }

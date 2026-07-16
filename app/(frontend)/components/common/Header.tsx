@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react'
 import { getCtaHref } from '../../../../utilities/cta'
-import { animateScrollToTop, animateScrollToY } from '../../../../utilities/scroll'
+import { handleSmoothScrollClick } from '../../../../utilities/scroll'
 
 interface Media {
   url?: string
@@ -74,34 +74,6 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
   const logoUrl = typeof data.logo === 'object' && data.logo?.url ? data.logo.url : ''
   const logoAlt = typeof data.logo === 'object' && data.logo?.alt ? data.logo.alt : 'Logo'
 
-  // Intercept click on same-page anchor tags to enforce smooth scroll
-  const handleScrollClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    // If clicking home/logo while already on home page, scroll to top smoothly
-    if (href === '/' || href === '#home') {
-      if (pathname === '/') {
-        e.preventDefault()
-        animateScrollToTop(1200) // Custom slow scroll to top
-        window.history.pushState(null, '', '/')
-        setMobileMenuOpen(false)
-        return
-      }
-    }
-
-    if (href.startsWith('#')) {
-      const id = decodeURIComponent(href.substring(1))
-      const element = document.getElementById(id)
-      if (element) {
-        e.preventDefault()
-        const headerOffset = 112 // Height of the fixed header on desktop (h-28)
-        const elementPosition = element.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.scrollY - headerOffset
-        animateScrollToY(offsetPosition, 1200) // Custom slow scroll to Y coordinate
-        window.history.pushState(null, '', href)
-        setMobileMenuOpen(false)
-      }
-    }
-  }
-
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 bg-[#18110B]/90 backdrop-blur-lg border-b border-amber-950/15 transition-all duration-300 ease-in-out ${
       visible ? 'translate-y-0' : '-translate-y-full'
@@ -114,7 +86,7 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
           <div className="flex-shrink-0">
             <Link
               href="/"
-              onClick={(e) => handleScrollClick(e, '/')}
+              onClick={(e) => handleSmoothScrollClick(e, '/', pathname)}
               className="flex items-center group"
             >
               {logoUrl ? (
@@ -138,7 +110,7 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
                 <div key={item.id || idx} className="relative group/nav py-4 flex items-center h-full">
                   <Link
                     href={resolvedHref}
-                    onClick={(e) => handleScrollClick(e, resolvedHref)}
+                    onClick={(e) => handleSmoothScrollClick(e, resolvedHref, pathname)}
                     className={`text-base font-bold transition-colors duration-300 flex items-center gap-1 py-2 ${
                       isActive ? 'text-amber-400 font-extrabold' : 'text-amber-100/90 hover:text-amber-400'
                     }`}
@@ -164,7 +136,7 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
                           <Link
                             key={sIdx}
                             href={subResolvedHref}
-                            onClick={(e) => handleScrollClick(e, subResolvedHref)}
+                            onClick={(e) => handleSmoothScrollClick(e, subResolvedHref, pathname)}
                             className={`block px-5 py-2.5 text-sm font-bold transition-colors duration-200 ${
                               isSubActive ? 'text-amber-400 bg-white/5' : 'text-amber-100/80 hover:text-amber-400 hover:bg-white/5'
                             }`}
@@ -184,7 +156,8 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
           <div className="hidden md:flex items-center">
             {data.ctaButton?.text ? (
               <Link
-                href={getCtaHref(data.ctaButton)}
+                href={getCtaHref(data.ctaButton, pathname)}
+                onClick={(e) => handleSmoothScrollClick(e, getCtaHref(data.ctaButton, pathname), pathname)}
                 className="inline-flex items-center gap-1.5 px-6 py-3 bg-amber-500 hover:bg-transparent border border-transparent hover:border-amber-500 text-slate-950 hover:text-amber-400 text-sm font-extrabold rounded-lg shadow-md hover:shadow-amber-500/10 transition-all duration-300"
               >
                 <span>{data.ctaButton.text}</span>
@@ -220,7 +193,7 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
                   <Link
                     href={resolvedHref}
                     onClick={(e) => {
-                      handleScrollClick(e, resolvedHref)
+                      handleSmoothScrollClick(e, resolvedHref, pathname)
                       if (!item.subMenu || item.subMenu.length === 0) {
                         setMobileMenuOpen(false)
                       }
@@ -243,7 +216,7 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
                             key={sIdx}
                             href={subResolvedHref}
                             onClick={(e) => {
-                              handleScrollClick(e, subResolvedHref)
+                              handleSmoothScrollClick(e, subResolvedHref, pathname)
                               setMobileMenuOpen(false)
                             }}
                             className={`text-sm font-semibold p-1.5 transition-colors ${
@@ -264,8 +237,11 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
           {data.ctaButton?.text && (
             <div className="pt-4 border-t border-amber-950/15">
               <Link
-                href={getCtaHref(data.ctaButton)}
-                onClick={() => setMobileMenuOpen(false)}
+                href={getCtaHref(data.ctaButton, pathname)}
+                onClick={(e) => {
+                  handleSmoothScrollClick(e, getCtaHref(data.ctaButton, pathname), pathname)
+                  setMobileMenuOpen(false)
+                }}
                 className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-amber-500 hover:bg-transparent border border-transparent hover:border-amber-500 text-slate-950 hover:text-amber-400 font-bold rounded-lg transition-all duration-300"
               >
                 <span>{data.ctaButton.text}</span>
