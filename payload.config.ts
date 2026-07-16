@@ -8,6 +8,8 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
+import { Messages } from './collections/Messages'
+import { Feedbacks } from './collections/Feedbacks'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 
@@ -21,7 +23,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, Media, Users],
+  collections: [Pages, Media, Users, Messages, Feedbacks],
   globals: [Header, Footer],
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',

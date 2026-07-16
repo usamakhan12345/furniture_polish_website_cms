@@ -55,6 +55,7 @@ export const ServicesBlock: Block = {
           label: 'Service Description Summary',
         },
         imageHelper('icon', 'Service Icon (SVG/PNG)', false),
+        imageHelper('image', 'Service Modal Image Showcase', false),
         {
           name: 'link',
           type: 'text',

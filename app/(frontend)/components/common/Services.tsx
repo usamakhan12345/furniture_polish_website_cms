@@ -1,6 +1,8 @@
-import React from 'react'
+'use client'
+
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, X, Image as ImageIcon } from 'lucide-react'
 
 interface Media {
   url?: string
@@ -12,6 +14,7 @@ interface ServiceCardItem {
   title: string
   description: string
   icon?: Media | string | null
+  image?: Media | string | null // Modal image showcase from CMS
   link?: string
 }
 
@@ -34,6 +37,20 @@ export const Services: React.FC<ServicesProps> = ({
   browseAllLink,
   services,
 }) => {
+  const [selectedService, setSelectedService] = useState<ServiceCardItem | null>(null)
+
+  // Prevent background scrolling when services details modal is active
+  useEffect(() => {
+    if (selectedService) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [selectedService])
+
   return (
     <section id={anchorId || 'services'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF6EE]/30 overflow-hidden border-t border-slate-200/50">
       {/* Decorative background glow */}
@@ -82,8 +99,12 @@ export const Services: React.FC<ServicesProps> = ({
             const iconUrl = typeof item.icon === 'object' && item.icon?.url ? item.icon.url : ''
             const iconAlt = typeof item.icon === 'object' && item.icon?.alt ? item.icon.alt : item.title
 
-            const cardContent = (
-              <div className="flex flex-col bg-white border border-amber-500/10 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 wood-card-hover h-full text-left">
+            return (
+              <button
+                key={item.id || idx}
+                onClick={() => setSelectedService(item)}
+                className="group flex flex-col bg-white border border-amber-500/10 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 wood-card-hover h-full text-left cursor-pointer w-full focus:outline-none focus:ring-1 focus:ring-amber-500/30"
+              >
                 {/* Icon Box */}
                 <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-600 flex items-center justify-center mb-6">
                   {iconUrl ? (
@@ -103,27 +124,72 @@ export const Services: React.FC<ServicesProps> = ({
                 <p className="text-slate-600 text-sm sm:text-base lg:text-lg leading-relaxed font-medium">
                   {item.description}
                 </p>
-              </div>
-            )
-
-            return item.link ? (
-              <Link
-                key={item.id || idx}
-                href={item.link}
-                className="group h-full block"
-              >
-                {cardContent}
-              </Link>
-            ) : (
-              <div key={item.id || idx} className="h-full block">
-                {cardContent}
-              </div>
+              </button>
             )
           })}
         </div>
 
       </div>
+
+      {/* Services Details Modal Overlay */}
+      {selectedService && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in"
+          onClick={() => setSelectedService(null)}
+        >
+          <div 
+            className="bg-white rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl relative border border-slate-200/50 animate-scale-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedService(null)}
+              className="absolute top-5 right-5 z-20 p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900 transition-colors shadow-sm cursor-pointer"
+              aria-label="Close modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Modal Image Showcase */}
+            <div className="w-full aspect-[16/10] relative overflow-hidden bg-slate-50 border-b border-slate-100">
+              {(() => {
+                const imgUrl = typeof selectedService.image === 'object' && selectedService.image?.url ? selectedService.image.url : ''
+                const imgAlt = typeof selectedService.image === 'object' && selectedService.image?.alt ? selectedService.image.alt : selectedService.title
+                
+                return imgUrl ? (
+                  <img src={imgUrl} alt={imgAlt} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 gap-2">
+                    <ImageIcon className="w-12 h-12 text-slate-300" />
+                    <span className="text-sm font-semibold">No Image Showcase Uploaded</span>
+                  </div>
+                )
+              })()}
+            </div>
+
+            {/* Modal Body Content */}
+            <div className="p-8">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-4 tracking-tight">
+                {selectedService.title}
+              </h3>
+              <p className="text-slate-600 text-base sm:text-lg leading-relaxed font-medium mb-6">
+                {selectedService.description}
+              </p>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setSelectedService(null)}
+                  className="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-md transition-all active:scale-95 cursor-pointer"
+                >
+                  Close Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
+
 export default Services

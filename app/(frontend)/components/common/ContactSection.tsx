@@ -37,7 +37,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   location,
   mapUrl,
 }) => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [isMapOpen, setIsMapOpen] = useState(false)
 
@@ -63,10 +63,25 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
     e.preventDefault()
     setStatus('loading')
 
-    setTimeout(() => {
-      setStatus('success')
-      setFormData({ name: '', email: '', message: '' })
-    }, 1500)
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        setStatus('success')
+        setFormData({ name: '', email: '', phone: '', message: '' })
+      } else {
+        setStatus('error')
+      }
+    } catch (err) {
+      console.error('Contact form submission error:', err)
+      setStatus('error')
+    }
   }
 
   const cleanNumber = (num: string) => num.replace(/[^0-9+]/g, '')
@@ -207,6 +222,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
+              {status === 'error' && (
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 text-sm font-bold text-center animate-fade-in">
+                  Something went wrong. Please check your network connection and try again.
+                </div>
+              )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="flex flex-col">
                   <label htmlFor="name" className="text-amber-600 text-xs font-bold uppercase mb-2">Your Name</label>
@@ -233,7 +253,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   />
                 </div>
               </div>
-
+              <div className="flex flex-col">
+                <label htmlFor="phone" className="text-amber-600 text-xs font-bold uppercase mb-2">Phone Number</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  required
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder="e.g. +92 300 1234567"
+                  className="bg-[#FDFBF9] border border-slate-300 rounded-xl px-4 py-3.5 text-slate-900 font-medium focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-400"
+                />
+              </div>
               <div className="flex flex-col">
                 <label htmlFor="message" className="text-amber-600 text-xs font-bold uppercase mb-2">Your Message</label>
                 <textarea
