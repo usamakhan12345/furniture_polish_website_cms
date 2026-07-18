@@ -12,6 +12,7 @@
     "@payloadcms/db-mongodb": "^3.86.0",
     "@payloadcms/next": "^3.86.0",
     "@payloadcms/richtext-lexical": "^3.86.0",
+    "@payloadcms/storage-vercel-blob": "^3.86.0",
     "@types/nodemailer": "^8.0.1",
     "lucide-react": "^1.24.0",
     "next": "16.2.10",

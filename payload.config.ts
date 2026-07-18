@@ -4,6 +4,7 @@ import { buildConfig } from 'payload'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -34,4 +35,15 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+    plugins: [
+    vercelBlobStorage({
+      enabled: true,
+      collections: {
+        media: true, // replace 'media' with your actual upload collection slug(s)
+        gallery :true, // replace 'gallery' with your actual upload collection slug(s)
+      },
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    }),
+    // ...any other existing plugins
+  ],
 })
