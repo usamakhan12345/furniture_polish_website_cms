@@ -17,6 +17,11 @@ import { Footer } from './globals/Footer'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const isVercelBlobTokenValid = Boolean(
+  process.env.BLOB_READ_WRITE_TOKEN &&
+    process.env.BLOB_READ_WRITE_TOKEN.startsWith('vercel_blob_rw_')
+)
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -35,15 +40,17 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-    plugins: [
-    vercelBlobStorage({
-      enabled: true,
-      collections: {
-        media: true, // replace 'media' with your actual upload collection slug(s)
-        gallery :true, // replace 'gallery' with your actual upload collection slug(s)
-      },
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    }),
-    // ...any other existing plugins
+  plugins: [
+    ...(isVercelBlobTokenValid
+      ? [
+          vercelBlobStorage({
+            enabled: true,
+            collections: {
+              media: true,
+            },
+            token: process.env.BLOB_READ_WRITE_TOKEN!,
+          }),
+        ]
+      : []),
   ],
 })

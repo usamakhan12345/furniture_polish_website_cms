@@ -141,7 +141,11 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
             className="flex items-center mb-6"
           >
             {logoUrl ? (
-              <img src={logoUrl} alt={logoAlt} className="h-14 w-auto object-contain transition-transform duration-300 hover:scale-105" />
+              <img
+                src={logoUrl}
+                alt={logoAlt}
+                className="h-14 md:h-16 w-auto max-w-[260px] object-contain mix-blend-screen transition-transform duration-300 hover:scale-105"
+              />
             ) : (
               <span className="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">
                 POLISH MASTER

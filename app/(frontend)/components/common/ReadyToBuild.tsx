@@ -65,7 +65,7 @@ export const ReadyToBuild: React.FC<ReadyToBuildProps> = ({
               <div>
                 <Link
                   href={getCtaHref(cta)}
-                  className="inline-flex items-center justify-center px-8 py-4 bg-amber-500 hover:bg-transparent border border-transparent hover:border-amber-500 text-slate-950 hover:text-amber-600 font-bold rounded-xl shadow-lg hover:shadow-amber-500/20 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-amber-500 hover:bg-transparent border border-transparent hover:border-amber-500 text-slate-950 hover:text-amber-600 font-bold rounded-xl shadow-lg hover:shadow-amber-500/20 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
                 >
                   {cta.text}
                 </Link>

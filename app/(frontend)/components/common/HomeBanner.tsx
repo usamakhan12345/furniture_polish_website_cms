@@ -93,7 +93,7 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
           {ctaButton?.text ? (
             <Link
               href={getCtaHref(ctaButton)}
-              className="w-full sm:w-auto px-8 py-4 bg-amber-500 hover:bg-transparent border border-transparent hover:border-amber-500 text-slate-950 hover:text-amber-400 font-bold rounded-lg shadow-lg hover:shadow-amber-500/20 transition-all duration-300 text-center"
+              className="w-full sm:w-auto px-8 py-4 bg-amber-500 hover:bg-transparent border border-transparent hover:border-amber-500 text-slate-950 hover:text-amber-400 font-bold rounded-lg shadow-lg hover:shadow-amber-500/20 transition-all duration-300 text-center cursor-pointer"
             >
               {ctaButton.text}
             </Link>
@@ -102,7 +102,7 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
           {secondaryCta?.text ? (
             <Link
               href={getCtaHref(secondaryCta)}
-              className="w-full sm:w-auto px-8 py-4 bg-transparent hover:bg-amber-500 border border-amber-500/50 hover:border-transparent text-amber-400 hover:text-slate-950 font-bold rounded-lg transition-all duration-300 text-center"
+              className="w-full sm:w-auto px-8 py-4 bg-transparent hover:bg-amber-500 border border-amber-500/50 hover:border-transparent text-amber-400 hover:text-slate-950 font-bold rounded-lg transition-all duration-300 text-center cursor-pointer"
             >
               {secondaryCta.text}
             </Link>

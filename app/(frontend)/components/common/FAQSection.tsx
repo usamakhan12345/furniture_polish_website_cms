@@ -69,7 +69,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleOpen(idx)}
-                  className={`w-full flex items-center justify-between p-6 sm:p-8 text-left font-bold text-lg transition-colors duration-200 ${
+                  className={`w-full flex items-center justify-between p-6 sm:p-8 text-left font-bold text-lg transition-colors duration-200 cursor-pointer ${
                     isOpen ? 'text-amber-600' : 'text-slate-800 hover:text-amber-600'
                   }`}
                 >

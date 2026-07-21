@@ -89,7 +89,7 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
             <button
               type="button"
               onClick={handlePrev}
-              className="p-3.5 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-amber-600 hover:border-amber-500/30 transition-all duration-200 shadow-sm"
+              className="p-3.5 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-amber-600 hover:border-amber-500/30 transition-all duration-200 shadow-sm cursor-pointer"
               aria-label="Previous Slide"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -97,7 +97,7 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
             <button
               type="button"
               onClick={handleNext}
-              className="p-3.5 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-amber-600 hover:border-amber-500/30 transition-all duration-200 shadow-sm"
+              className="p-3.5 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-amber-600 hover:border-amber-500/30 transition-all duration-200 shadow-sm cursor-pointer"
               aria-label="Next Slide"
             >
               <ArrowRight className="w-5 h-5" />

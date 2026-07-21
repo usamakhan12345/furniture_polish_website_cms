@@ -281,7 +281,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-xl shadow-lg disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-xl shadow-lg disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 cursor-pointer"
               >
                 {status === 'loading' ? (
                   <>
