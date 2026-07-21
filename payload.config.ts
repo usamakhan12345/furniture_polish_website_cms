@@ -45,6 +45,7 @@ export default buildConfig({
       ? [
           vercelBlobStorage({
             enabled: true,
+            addRandomSuffix: true,
             collections: {
               media: true,
             },
