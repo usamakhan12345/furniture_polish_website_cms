@@ -4,7 +4,7 @@ import { buildConfig } from 'payload'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { cloudinaryStorage } from 'payload-storage-cloudinary'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -17,9 +17,10 @@ import { Footer } from './globals/Footer'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const isVercelBlobTokenValid = Boolean(
-  process.env.BLOB_READ_WRITE_TOKEN &&
-    process.env.BLOB_READ_WRITE_TOKEN.startsWith('vercel_blob_rw_')
+const isCloudinaryConfigured = Boolean(
+  process.env.CLOUDINARY_CLOUD_NAME &&
+    process.env.CLOUDINARY_API_KEY &&
+    process.env.CLOUDINARY_API_SECRET
 )
 
 export default buildConfig({
@@ -41,15 +42,17 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   plugins: [
-    ...(isVercelBlobTokenValid
+    ...(isCloudinaryConfigured
       ? [
-          vercelBlobStorage({
-            enabled: true,
-            addRandomSuffix: true,
+          cloudinaryStorage({
+            cloudConfig: {
+              cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+              api_key: process.env.CLOUDINARY_API_KEY,
+              api_secret: process.env.CLOUDINARY_API_SECRET,
+            },
             collections: {
               media: true,
             },
-            token: process.env.BLOB_READ_WRITE_TOKEN!,
           }),
         ]
       : []),
