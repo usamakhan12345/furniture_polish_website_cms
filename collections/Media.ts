@@ -20,8 +20,9 @@ export const Media: CollectionConfig = {
     },
     {
       name: 'base64Data',
-      type: 'text',
+      type: 'textarea',
       required: false,
+      validate: () => true,
       admin: {
         hidden: true,
       },
