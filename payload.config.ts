@@ -20,8 +20,8 @@ const dirname = path.dirname(filename)
 
 const mongoBase64Adapter = (): Adapter => ({ collection, prefix }) => ({
   name: 'mongo-base64',
-  generateURL: ({ data }: { data: any }) => {
-    return data?.url || ''
+  generateURL: ({ filename }: { filename: string }) => {
+    return `/api/media/file/${filename}`
   },
   handleDelete: async () => {},
   handleUpload: async ({ data, file }: { data: any; file: any }) => {
@@ -40,7 +40,39 @@ const mongoBase64Adapter = (): Adapter => ({ collection, prefix }) => ({
     data.mimeType = mime
     return data
   },
-  staticHandler: () => new Response(null, { status: 404 }),
+  staticHandler: async (req, { params: { filename } }) => {
+    try {
+      const doc = await req.payload.find({
+        collection: 'media',
+        where: {
+          filename: {
+            equals: filename,
+          },
+        },
+        limit: 1,
+      })
+
+      if (doc.docs && doc.docs.length > 0) {
+        const item = doc.docs[0] as any
+        if (item.url && item.url.startsWith('data:')) {
+          const matches = item.url.match(/^data:(.+?);base64,(.+)$/)
+          if (matches) {
+            const mimeType = matches[1] || 'image/png'
+            const buffer = Buffer.from(matches[2], 'base64')
+            return new Response(buffer, {
+              headers: {
+                'Content-Type': mimeType,
+                'Cache-Control': 'public, max-age=31536000, immutable',
+              },
+            })
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Static handler error serving media:', err)
+    }
+    return new Response('File not found', { status: 404 })
+  },
 })
 
 export default buildConfig({
