@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
 import type { Adapter } from '@payloadcms/plugin-cloud-storage/types'
-import { v2 as cloudinary } from 'cloudinary'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -19,69 +18,27 @@ import { Footer } from './globals/Footer'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const cloudName = process.env.CLOUDINARY_CLOUD_NAME || 'dnzgzlxxy'
-const apiKey = process.env.CLOUDINARY_API_KEY || '235392421442991'
-const apiSecret = process.env.CLOUDINARY_API_SECRET || 'UUW6ti8sTslaVyQNeJquJdVv61Q'
-
-cloudinary.config({
-  cloud_name: cloudName,
-  api_key: apiKey,
-  api_secret: apiSecret,
-})
-
-const customCloudinaryAdapter = (): Adapter => ({ collection, prefix }) => ({
-  name: 'cloudinary',
-  generateURL: ({ filename }: { filename: string }) => {
-    return `https://res.cloudinary.com/${cloudName}/image/upload/v1/furniture_polish/${filename}`
+const mongoBase64Adapter = (): Adapter => ({ collection, prefix }) => ({
+  name: 'mongo-base64',
+  generateURL: ({ data }: { data: any }) => {
+    return data?.url || ''
   },
-  handleDelete: async ({ filename }: { filename: string }) => {
-    try {
-      const cleanPublicId = filename
-        ? filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9_\-]/g, '_')
-        : ''
-      await cloudinary.uploader.destroy(`furniture_polish/${cleanPublicId}`)
-    } catch (err) {
-      console.error('Cloudinary delete error:', err)
-    }
-  },
+  handleDelete: async () => {},
   handleUpload: async ({ data, file }: { data: any; file: any }) => {
     if (!file || !file.buffer) {
       return data
     }
-    const cleanPublicId = file.filename
-      ? file.filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9_\-]/g, '_')
-      : `file_${Date.now()}`
-
-    const fileBuffer = Buffer.isBuffer(file.buffer)
+    const buffer = Buffer.isBuffer(file.buffer)
       ? file.buffer
       : Buffer.from(file.buffer)
+    const base64 = buffer.toString('base64')
+    const mime = file.mimeType || 'image/png'
 
-    return new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: 'furniture_polish',
-          public_id: cleanPublicId,
-          resource_type: 'auto',
-          overwrite: true,
-        },
-        (error, result) => {
-          if (error) {
-            console.error('Cloudinary upload_stream error:', error)
-            return reject(error)
-          }
-          if (result) {
-            data.url = result.secure_url
-            data.filename = file.filename
-            data.filesize = result.bytes || file.filesize
-            data.mimeType = file.mimeType
-            if (result.width) data.width = result.width
-            if (result.height) data.height = result.height
-          }
-          resolve(data)
-        }
-      )
-      uploadStream.end(fileBuffer)
-    })
+    data.url = `data:${mime};base64,${base64}`
+    data.filename = file.filename
+    data.filesize = file.filesize || buffer.length
+    data.mimeType = mime
+    return data
   },
   staticHandler: () => new Response(null, { status: 404 }),
 })
@@ -108,7 +65,7 @@ export default buildConfig({
     cloudStoragePlugin({
       collections: {
         media: {
-          adapter: customCloudinaryAdapter(),
+          adapter: mongoBase64Adapter(),
           disableLocalStorage: true,
         },
       },
