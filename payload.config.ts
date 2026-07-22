@@ -32,13 +32,14 @@ cloudinary.config({
 const customCloudinaryAdapter = (): Adapter => ({ collection, prefix }) => ({
   name: 'cloudinary',
   generateURL: ({ filename }: { filename: string }) => {
-    const cleanName = filename ? filename.replace(/\.[^/.]+$/, '') : ''
-    return `https://res.cloudinary.com/${cloudName}/image/upload/v1/furniture_polish/${cleanName}`
+    return `https://res.cloudinary.com/${cloudName}/image/upload/v1/furniture_polish/${filename}`
   },
   handleDelete: async ({ filename }: { filename: string }) => {
     try {
-      const publicId = `furniture_polish/${filename.replace(/\.[^/.]+$/, '')}`
-      await cloudinary.uploader.destroy(publicId)
+      const cleanPublicId = filename
+        ? filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9_\-]/g, '_')
+        : ''
+      await cloudinary.uploader.destroy(`furniture_polish/${cleanPublicId}`)
     } catch (err) {
       console.error('Cloudinary delete error:', err)
     }
@@ -47,11 +48,19 @@ const customCloudinaryAdapter = (): Adapter => ({ collection, prefix }) => ({
     if (!file || !file.buffer) {
       return data
     }
+    const cleanPublicId = file.filename
+      ? file.filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9_\-]/g, '_')
+      : `file_${Date.now()}`
+
+    const fileBuffer = Buffer.isBuffer(file.buffer)
+      ? file.buffer
+      : Buffer.from(file.buffer)
+
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: 'furniture_polish',
-          public_id: file.filename.replace(/\.[^/.]+$/, ''),
+          public_id: cleanPublicId,
           resource_type: 'auto',
           overwrite: true,
         },
@@ -71,7 +80,7 @@ const customCloudinaryAdapter = (): Adapter => ({ collection, prefix }) => ({
           resolve(data)
         }
       )
-      uploadStream.end(file.buffer)
+      uploadStream.end(fileBuffer)
     })
   },
   staticHandler: () => new Response(null, { status: 404 }),
