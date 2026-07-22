@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -41,11 +42,11 @@ export const WhoWeAre: React.FC<WhoWeAreProps> = ({
   card2,
   highlights,
 }) => {
-  const c1ImgUrl = typeof card1?.image === 'object' && card1?.image?.url ? card1.image.url : ''
-  const c1ImgAlt = typeof card1?.image === 'object' && card1?.image?.alt ? card1.image.alt : 'Card 1 Image'
+  const c1ImgUrl = resolveMediaUrl(card1?.image)
+  const c1ImgAlt = resolveMediaAlt(card1?.image, 'Card 1 Image')
 
-  const c2ImgUrl = typeof card2?.image === 'object' && card2?.image?.url ? card2.image.url : ''
-  const c2ImgAlt = typeof card2?.image === 'object' && card2?.image?.alt ? card2.image.alt : 'Card 2 Image'
+  const c2ImgUrl = resolveMediaUrl(card2?.image)
+  const c2ImgAlt = resolveMediaAlt(card2?.image, 'Card 2 Image')
 
   return (
     <section id={anchorId || 'who-we-are'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">

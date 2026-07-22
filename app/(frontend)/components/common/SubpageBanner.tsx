@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { getCtaHref } from '../../../../utilities/cta'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -31,8 +32,8 @@ export const SubpageBanner: React.FC<SubpageBannerProps> = ({
   cta1,
   cta2,
 }) => {
-  const imgUrl = typeof image === 'object' && image?.url ? image.url : ''
-  const imgAlt = typeof image === 'object' && image?.alt ? image.alt : 'Background Image'
+  const imgUrl = resolveMediaUrl(image)
+  const imgAlt = resolveMediaAlt(image, 'Background Image')
 
   return (
     <section id={anchorId || 'subpage-banner'} className="relative min-h-[45vh] lg:min-h-[50vh] flex items-center justify-start py-20 lg:py-24 bg-[#FAF6EE] overflow-hidden border-t border-slate-200/50">

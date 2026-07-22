@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { getCtaHref } from '../../../../utilities/cta'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -114,8 +115,8 @@ export const WorkSlider: React.FC<WorkSliderProps> = ({
             }}
           >
             {displaySlides.map((slide, idx) => {
-              const imgUrl = typeof slide.image === 'object' && slide.image?.url ? slide.image.url : ''
-              const imgAlt = typeof slide.image === 'object' && slide.image?.alt ? slide.image.alt : slide.title
+              const imgUrl = resolveMediaUrl(slide.image)
+              const imgAlt = resolveMediaAlt(slide.image, slide.title)
               const ctaUrl = slide.cta ? getCtaHref(slide.cta) : ''
 
               return (

@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { getCtaHref } from '../../../../utilities/cta'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -29,8 +30,8 @@ export const FeaturedPost: React.FC<FeaturedPostProps> = ({
   image,
   cta,
 }) => {
-  const imgUrl = typeof image === 'object' && image?.url ? image.url : ''
-  const imgAlt = typeof image === 'object' && image?.alt ? image.alt : 'Featured Post Image'
+  const imgUrl = resolveMediaUrl(image)
+  const imgAlt = resolveMediaAlt(image, 'Featured Post Image')
 
   return (
     <section id={anchorId || 'featured-post'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-700 overflow-hidden border-t border-amber-500/10">

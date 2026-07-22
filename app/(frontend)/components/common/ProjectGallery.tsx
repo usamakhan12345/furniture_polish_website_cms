@@ -1,4 +1,5 @@
 import React from 'react'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -27,8 +28,8 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
   mainImage,
   gridImages,
 }) => {
-  const mainImgUrl = typeof mainImage === 'object' && mainImage?.url ? mainImage.url : ''
-  const mainImgAlt = typeof mainImage === 'object' && mainImage?.alt ? mainImage.alt : 'Featured Project'
+  const mainImgUrl = resolveMediaUrl(mainImage)
+  const mainImgAlt = resolveMediaAlt(mainImage, 'Featured Project')
 
   return (
     <section id={anchorId || 'project-gallery'} className="relative py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">
@@ -79,8 +80,8 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
           {/* Right Column: Smaller Grid Images (Flow smoothly next to or below the featured card) */}
           {Array.from({ length: 4 }).map((_, idx) => {
             const item = gridImages?.[idx]
-            const itemImgUrl = typeof item?.image === 'object' && item?.image?.url ? item.image.url : ''
-            const itemImgAlt = typeof item?.image === 'object' && item?.image?.alt ? item.image.alt : `Gallery Image ${idx + 1}`
+            const itemImgUrl = resolveMediaUrl(item?.image)
+            const itemImgAlt = resolveMediaAlt(item?.image, `Gallery Image ${idx + 1}`)
 
             return (
               <div

@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react'
 import { getCtaHref } from '../../../../utilities/cta'
 import { handleSmoothScrollClick } from '../../../../utilities/scroll'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -71,8 +72,8 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
 
   if (!data) return null
 
-  const logoUrl = typeof data.logo === 'object' && data.logo?.url ? data.logo.url : ''
-  const logoAlt = typeof data.logo === 'object' && data.logo?.alt ? data.logo.alt : 'Logo'
+  const logoUrl = resolveMediaUrl(data.logo)
+  const logoAlt = resolveMediaAlt(data.logo, 'Logo')
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 bg-[#18110B]/90 backdrop-blur-lg border-b border-amber-950/15 transition-all duration-300 ease-in-out ${

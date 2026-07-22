@@ -1,4 +1,5 @@
 import React from 'react'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -28,8 +29,8 @@ export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({
   image,
   features,
 }) => {
-  const imgUrl = typeof image === 'object' && image?.url ? image.url : ''
-  const imgAlt = typeof image === 'object' && image?.alt ? image.alt : 'Showcase Image'
+  const imgUrl = resolveMediaUrl(image)
+  const imgAlt = resolveMediaAlt(image, 'Showcase Image')
 
   return (
     <section id={anchorId || 'why-choose-us'} className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">

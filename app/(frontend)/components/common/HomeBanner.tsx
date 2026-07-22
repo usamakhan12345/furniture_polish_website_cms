@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { getCtaHref } from '../../../../utilities/cta'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -35,9 +36,9 @@ export const HomeBanner: React.FC<HomeBannerProps> = ({
   ctaButton,
   secondaryCta,
 }) => {
-  const bgUrl = typeof backgroundImage === 'object' && backgroundImage?.url ? backgroundImage.url : ''
-  const bgAlt = typeof backgroundImage === 'object' && backgroundImage?.alt ? backgroundImage.alt : 'Background Image'
-  const videoUrl = typeof backgroundVideo === 'object' && backgroundVideo?.url ? backgroundVideo.url : ''
+  const bgUrl = resolveMediaUrl(backgroundImage)
+  const bgAlt = resolveMediaAlt(backgroundImage, 'Background Image')
+  const videoUrl = resolveMediaUrl(backgroundVideo)
 
   return (
     <section id={anchorId || 'home'} className="relative min-h-[75vh] lg:min-h-[85vh] flex items-center justify-start overflow-hidden py-20 lg:py-28 bg-[#18110B]">

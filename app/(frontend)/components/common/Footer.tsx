@@ -4,6 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { handleSmoothScrollClick } from '../../../../utilities/scroll'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -118,8 +119,8 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
 
   // Resolve Custom Footer Logo (if present, fallback to default logo)
   const activeLogo = data.footerLogo || data.logo
-  const logoUrl = typeof activeLogo === 'object' && activeLogo?.url ? activeLogo.url : ''
-  const logoAlt = typeof activeLogo === 'object' && activeLogo?.alt ? activeLogo.alt : 'Logo'
+  const logoUrl = resolveMediaUrl(activeLogo)
+  const logoAlt = resolveMediaAlt(activeLogo, 'Logo')
 
   const defaultLinks: NavLink[] = [
     { id: 'fl1', label: 'Home', isExternal: true, link: '/' },

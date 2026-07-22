@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { ArrowLeft, ArrowRight, Quote, X, Send, Loader2, Star } from 'lucide-react'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -208,8 +209,8 @@ export const FeedbackSection: React.FC<FeedbackSectionProps> = ({
               }}
             >
               {displayTestimonials.map((t, idx) => {
-                const avatarUrl = typeof t.image === 'object' && t.image?.url ? t.image.url : ''
-                const avatarAlt = typeof t.image === 'object' && t.image?.alt ? t.image.alt : t.name
+                const avatarUrl = resolveMediaUrl(t.image)
+                const avatarAlt = resolveMediaAlt(t.image, t.name)
 
                 return (
                   <div

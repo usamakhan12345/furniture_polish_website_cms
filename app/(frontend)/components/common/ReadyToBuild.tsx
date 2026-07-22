@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { getCtaHref } from '../../../../utilities/cta'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -27,8 +28,8 @@ export const ReadyToBuild: React.FC<ReadyToBuildProps> = ({
   cta,
   backgroundImage,
 }) => {
-  const bgUrl = typeof backgroundImage === 'object' && backgroundImage?.url ? backgroundImage.url : ''
-  const bgAlt = typeof backgroundImage === 'object' && backgroundImage?.alt ? backgroundImage.alt : 'Background Image'
+  const bgUrl = resolveMediaUrl(backgroundImage)
+  const bgAlt = resolveMediaAlt(backgroundImage, 'Background Image')
 
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden border-t border-slate-200/50">

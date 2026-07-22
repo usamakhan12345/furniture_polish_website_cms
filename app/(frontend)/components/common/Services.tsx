@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowRight, X, Image as ImageIcon } from 'lucide-react'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -96,8 +97,8 @@ export const Services: React.FC<ServicesProps> = ({
         {/* 3-column cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services?.map((item, idx) => {
-            const iconUrl = typeof item.icon === 'object' && item.icon?.url ? item.icon.url : ''
-            const iconAlt = typeof item.icon === 'object' && item.icon?.alt ? item.icon.alt : item.title
+            const iconUrl = resolveMediaUrl(item.icon)
+            const iconAlt = resolveMediaAlt(item.icon, item.title)
 
             return (
               <button
@@ -153,8 +154,8 @@ export const Services: React.FC<ServicesProps> = ({
             {/* Modal Image Showcase */}
             <div className="w-full aspect-[16/10] relative overflow-hidden bg-slate-50 border-b border-slate-100">
               {(() => {
-                const imgUrl = typeof selectedService.image === 'object' && selectedService.image?.url ? selectedService.image.url : ''
-                const imgAlt = typeof selectedService.image === 'object' && selectedService.image?.alt ? selectedService.image.alt : selectedService.title
+                const imgUrl = resolveMediaUrl(selectedService.image)
+                const imgAlt = resolveMediaAlt(selectedService.image, selectedService.title)
                 
                 return imgUrl ? (
                   <img src={imgUrl} alt={imgAlt} className="w-full h-full object-cover" />

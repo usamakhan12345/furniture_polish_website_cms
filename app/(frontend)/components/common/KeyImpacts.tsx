@@ -1,4 +1,5 @@
 import React from 'react'
+import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
 
 interface Media {
   url?: string
@@ -45,8 +46,8 @@ export const KeyImpacts: React.FC<KeyImpactsProps> = ({
         {/* 4-column cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {impacts?.map((item, idx) => {
-            const iconUrl = typeof item.icon === 'object' && item.icon?.url ? item.icon.url : ''
-            const iconAlt = typeof item.icon === 'object' && item.icon?.alt ? item.icon.alt : item.title
+            const iconUrl = resolveMediaUrl(item.icon)
+            const iconAlt = resolveMediaAlt(item.icon, item.title)
 
             return (
               <div
