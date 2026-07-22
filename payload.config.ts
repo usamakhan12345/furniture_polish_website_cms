@@ -5,6 +5,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
+import type { Adapter } from '@payloadcms/plugin-cloud-storage/types'
 import { v2 as cloudinary } from 'cloudinary'
 
 import { Users } from './collections/Users'
@@ -32,7 +33,7 @@ if (isCloudinaryConfigured) {
   })
 }
 
-const customCloudinaryAdapter = () => ({
+const customCloudinaryAdapter = (): Adapter => ({ collection, prefix }) => ({
   name: 'cloudinary',
   generateURL: ({ filename }: { filename: string }) => {
     const cleanName = filename ? filename.replace(/\.[^/.]+$/, '') : ''
@@ -77,7 +78,7 @@ const customCloudinaryAdapter = () => ({
       uploadStream.end(file.buffer)
     })
   },
-  staticHandler: () => {},
+  staticHandler: () => new Response(null, { status: 404 }),
 })
 
 export default buildConfig({
