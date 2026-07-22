@@ -19,25 +19,21 @@ import { Footer } from './globals/Footer'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const isCloudinaryConfigured = Boolean(
-  process.env.CLOUDINARY_CLOUD_NAME &&
-    process.env.CLOUDINARY_API_KEY &&
-    process.env.CLOUDINARY_API_SECRET
-)
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME || 'dnzgzlxxy'
+const apiKey = process.env.CLOUDINARY_API_KEY || '235392421442991'
+const apiSecret = process.env.CLOUDINARY_API_SECRET || 'UUW6ti8sTslaVyQNeJquJdVv61Q'
 
-if (isCloudinaryConfigured) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  })
-}
+cloudinary.config({
+  cloud_name: cloudName,
+  api_key: apiKey,
+  api_secret: apiSecret,
+})
 
 const customCloudinaryAdapter = (): Adapter => ({ collection, prefix }) => ({
   name: 'cloudinary',
   generateURL: ({ filename }: { filename: string }) => {
     const cleanName = filename ? filename.replace(/\.[^/.]+$/, '') : ''
-    return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/v1/furniture_polish/${cleanName}`
+    return `https://res.cloudinary.com/${cloudName}/image/upload/v1/furniture_polish/${cleanName}`
   },
   handleDelete: async ({ filename }: { filename: string }) => {
     try {
@@ -100,17 +96,13 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   plugins: [
-    ...(isCloudinaryConfigured
-      ? [
-          cloudStoragePlugin({
-            collections: {
-              media: {
-                adapter: customCloudinaryAdapter(),
-                disableLocalStorage: true,
-              },
-            },
-          }),
-        ]
-      : []),
+    cloudStoragePlugin({
+      collections: {
+        media: {
+          adapter: customCloudinaryAdapter(),
+          disableLocalStorage: true,
+        },
+      },
+    }),
   ],
 })
