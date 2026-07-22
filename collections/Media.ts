@@ -18,5 +18,13 @@ export const Media: CollectionConfig = {
       type: 'text',
       required: false,
     },
+    {
+      name: 'base64Data',
+      type: 'text',
+      required: false,
+      admin: {
+        hidden: true,
+      },
+    },
   ],
 }

@@ -34,7 +34,8 @@ const mongoBase64Adapter = (): Adapter => ({ collection, prefix }) => ({
     const base64 = buffer.toString('base64')
     const mime = file.mimeType || 'image/png'
 
-    data.url = `data:${mime};base64,${base64}`
+    data.base64Data = base64
+    data.url = `/api/media/file/${file.filename}`
     data.filename = file.filename
     data.filesize = file.filesize || buffer.length
     data.mimeType = mime
@@ -54,18 +55,25 @@ const mongoBase64Adapter = (): Adapter => ({ collection, prefix }) => ({
 
       if (doc.docs && doc.docs.length > 0) {
         const item = doc.docs[0] as any
-        if (item.url && item.url.startsWith('data:')) {
+        let base64String = item.base64Data
+        let mimeType = item.mimeType || 'image/png'
+
+        if (!base64String && item.url && item.url.startsWith('data:')) {
           const matches = item.url.match(/^data:(.+?);base64,(.+)$/)
           if (matches) {
-            const mimeType = matches[1] || 'image/png'
-            const buffer = Buffer.from(matches[2], 'base64')
-            return new Response(buffer, {
-              headers: {
-                'Content-Type': mimeType,
-                'Cache-Control': 'public, max-age=31536000, immutable',
-              },
-            })
+            mimeType = matches[1] || mimeType
+            base64String = matches[2]
           }
+        }
+
+        if (base64String) {
+          const buffer = Buffer.from(base64String, 'base64')
+          return new Response(buffer, {
+            headers: {
+              'Content-Type': mimeType,
+              'Cache-Control': 'public, max-age=31536000, immutable',
+            },
+          })
         }
       }
     } catch (err) {
