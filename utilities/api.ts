@@ -24,11 +24,15 @@ export const getPayloadClient = async () => {
 export const getPageBySlug = async (slug: string) => {
   try {
     const payload = await getPayloadClient()
+      console.log("Payload--------->" , payload)
     
     // For homepage query, check for 'home', '/' or empty string slug
     const slugFilter = slug === 'home'
       ? { or: [{ slug: { equals: 'home' } }, { slug: { equals: '/' } }, { slug: { equals: '' } }] }
       : { slug: { equals: slug } }
+
+
+    
 
     const result = await payload.find({
       collection: 'pages',
