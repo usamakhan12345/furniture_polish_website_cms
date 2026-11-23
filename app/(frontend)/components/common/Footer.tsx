@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { handleSmoothScrollClick } from '../../../../utilities/scroll'
 import { resolveMediaUrl, resolveMediaAlt } from '../../../../utilities/media'
+import { Reveal } from '../ui/Reveal'
+import { stagger } from '../ui/motion'
 
 interface Media {
   url?: string
@@ -131,11 +133,22 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
   const activeLinks = data.navigationLinks && data.navigationLinks.length > 0 ? data.navigationLinks : defaultLinks
 
   return (
-    <footer className="bg-[#18110B] border-t border-amber-950/15 py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
-        
+    <footer className="relative overflow-hidden bg-[#18110B] py-20 px-4 sm:px-6 lg:px-8">
+      {/* Gold hairline across the top */}
+      <div
+        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/70 to-transparent"
+        aria-hidden="true"
+      />
+      {/* Ambient glow */}
+      <div
+        className="absolute -top-32 left-1/4 h-[320px] w-[320px] rounded-full bg-amber-500/5 blur-[120px] pointer-events-none animate-float-slow"
+        aria-hidden="true"
+      />
+
+      <div className="relative max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
+
         {/* Logo & Description Column */}
-        <div className="md:col-span-4 flex flex-col">
+        <Reveal className="md:col-span-4 flex flex-col">
           <Link
             href="/"
             onClick={(e) => handleSmoothScrollClick(e, '/', pathname)}
@@ -166,18 +179,19 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
                 href={s.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-lg bg-[#18110B] border border-amber-950/10 text-slate-400 hover:text-amber-400 hover:border-amber-500/30 transition-all duration-200"
+                aria-label={s.platform.charAt(0).toUpperCase() + s.platform.slice(1)}
+                className="p-2.5 rounded-lg bg-white/[0.03] border border-amber-500/10 text-slate-400 hover:text-slate-950 hover:bg-amber-500 hover:border-amber-500 hover:-translate-y-1 hover:rotate-6 hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300 ease-out"
               >
                 {getSocialIcon(s.platform)}
               </a>
             ))}
           </div>
-        </div>
+        </Reveal>
 
         {/* Dynamic Multi-Column Navigation Group */}
         {data.navigationGroups && data.navigationGroups.length > 0 ? (
           data.navigationGroups.map((group, idx) => (
-            <div key={group.id || idx} className="md:col-span-2 flex flex-col">
+            <Reveal key={group.id || idx} delay={stagger(idx + 1, 100)} className="md:col-span-2 flex flex-col">
               <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6">
                 {group.title}
               </h3>
@@ -189,19 +203,20 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
                       <Link
                         href={resolvedHref}
                         onClick={(e) => handleSmoothScrollClick(e, resolvedHref, pathname)}
-                        className="text-slate-400 hover:text-white text-sm font-semibold transition-colors duration-200"
+                        className="group inline-flex items-center gap-0 hover:gap-2 text-slate-400 hover:text-amber-400 text-sm font-semibold transition-all duration-300"
                       >
-                        {item.label}
+                        <span className="w-0 overflow-hidden text-amber-500 opacity-0 transition-all duration-300 group-hover:w-3 group-hover:opacity-100" aria-hidden="true">›</span>
+                        <span>{item.label}</span>
                       </Link>
                     </li>
                   )
                 })}
               </ul>
-            </div>
+            </Reveal>
           ))
         ) : (
           /* Fallback Single Column Navigation if Groups not defined */
-          <div className="md:col-span-3 flex flex-col">
+          <Reveal delay={100} className="md:col-span-3 flex flex-col">
             <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6">
               Quick Links
             </h3>
@@ -213,19 +228,20 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
                     <Link
                       href={resolvedHref}
                       onClick={(e) => handleSmoothScrollClick(e, resolvedHref, pathname)}
-                      className="text-slate-400 hover:text-white text-sm font-semibold transition-colors duration-200"
+                      className="group inline-flex items-center gap-0 hover:gap-2 text-slate-400 hover:text-amber-400 text-sm font-semibold transition-all duration-300"
                     >
-                      {item.label}
+                      <span className="w-0 overflow-hidden text-amber-500 opacity-0 transition-all duration-300 group-hover:w-3 group-hover:opacity-100" aria-hidden="true">›</span>
+                      <span>{item.label}</span>
                     </Link>
                   </li>
                 )
               })}
             </ul>
-          </div>
+          </Reveal>
         )}
 
         {/* Contact Info Column */}
-        <div className={`flex flex-col ${
+        <Reveal delay={200} className={`flex flex-col ${
           data.navigationGroups && data.navigationGroups.length > 0 ? 'md:col-span-4' : 'md:col-span-5'
         }`}>
           <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6">
@@ -235,7 +251,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
             {data.contactInformation?.email && (
               <li className="text-slate-400 text-sm font-medium">
                 <span className="text-slate-500 font-bold block mb-1">Email Address</span>
-                <a href={`mailto:${data.contactInformation.email}`} className="hover:text-white transition-colors">
+                <a href={`mailto:${data.contactInformation.email}`} className="link-underline pb-0.5 hover:text-amber-400 transition-colors">
                   {data.contactInformation.email}
                 </a>
               </li>
@@ -243,7 +259,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
             {data.contactInformation?.phone && (
               <li className="text-slate-400 text-sm font-medium">
                 <span className="text-slate-500 font-bold block mb-1">Phone Call</span>
-                <a href={`tel:${data.contactInformation.phone.replace(/[^0-9+]/g, '')}`} className="hover:text-white transition-colors">
+                <a href={`tel:${data.contactInformation.phone.replace(/[^0-9+]/g, '')}`} className="link-underline pb-0.5 hover:text-amber-400 transition-colors">
                   {data.contactInformation.phone}
                 </a>
               </li>
@@ -255,7 +271,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
                   href={`https://wa.me/${data.contactInformation.whatsapp.replace(/\D/g, '')}`} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="link-underline pb-0.5 hover:text-amber-400 transition-colors"
                 >
                   {data.contactInformation.whatsapp}
                 </a>
@@ -274,20 +290,24 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
               </li>
             )}
           </ul>
-        </div>
+        </Reveal>
 
       </div>
 
       {/* Copyright Banner */}
-      <div className="max-w-[1600px] mx-auto pt-8 border-t border-amber-950/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-semibold text-slate-500">
+      <Reveal
+        direction="fade"
+        delay={250}
+        className="relative max-w-[1600px] mx-auto pt-8 border-t border-amber-950/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-semibold text-slate-500"
+      >
         <span>
           {data.copyright || `© ${new Date().getFullYear()} Polish Master. All rights reserved.`}
         </span>
         <div className="flex gap-6">
-          <Link href="#" className="hover:text-slate-300">Privacy Policy</Link>
-          <Link href="#" className="hover:text-slate-300">Terms of Service</Link>
+          <Link href="#" className="link-underline pb-0.5 hover:text-amber-400 transition-colors">Privacy Policy</Link>
+          <Link href="#" className="link-underline pb-0.5 hover:text-amber-400 transition-colors">Terms of Service</Link>
         </div>
-      </div>
+      </Reveal>
     </footer>
   )
 }

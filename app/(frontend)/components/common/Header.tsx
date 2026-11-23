@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react'
@@ -51,24 +51,63 @@ const resolveNavLink = (href: string, pathname: string) => {
 export const Header: React.FC<HeaderProps> = ({ data }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [visible, setVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
+  const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
 
-  // Track scroll position to hide/show header
+  const lastScrollY = useRef(0)
+  const ticking = useRef(false)
+  const progressRef = useRef<HTMLSpanElement>(null)
+
+  // Track scroll: hide on scroll down / show on scroll up, compact once scrolled, and drive the progress bar.
+  // Runs once and uses refs, so scrolling doesn't re-subscribe or re-render the header every frame.
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setVisible(false)
-      } else {
-        setVisible(true)
+    const update = () => {
+      ticking.current = false
+      const y = window.scrollY
+      const delta = y - lastScrollY.current
+
+      setScrolled(y > 12)
+      if (Math.abs(delta) > 6) {
+        setVisible(delta < 0 || y < 100)
+        lastScrollY.current = y
       }
-      setLastScrollY(currentScrollY)
+
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      const progress = max > 0 ? Math.min(1, Math.max(0, y / max)) : 0
+      if (progressRef.current) {
+        progressRef.current.style.transform = `scaleX(${progress})`
+      }
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollY])
+    const onScroll = () => {
+      if (ticking.current) return
+      ticking.current = true
+      requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [])
+
+  // Close the mobile drawer on navigation
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
+
+  // Escape closes the mobile drawer
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileMenuOpen(false)
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [mobileMenuOpen])
 
   if (!data) return null
 
@@ -76,13 +115,30 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
   const logoAlt = resolveMediaAlt(data.logo, 'Logo')
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 bg-[#18110B]/90 backdrop-blur-lg border-b border-amber-950/15 transition-all duration-300 ease-in-out ${
-      visible ? 'translate-y-0' : '-translate-y-full'
-    }`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-500 ease-out ${
+        visible || mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'
+      } ${
+        // No shadow while the header is slid away, otherwise it bleeds into the top of the viewport
+        (scrolled || mobileMenuOpen) && (visible || mobileMenuOpen)
+          ? 'bg-[#18110B]/95 backdrop-blur-xl border-amber-500/15 shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6)]'
+          : 'bg-[#18110B]/90 backdrop-blur-lg border-amber-950/15 shadow-none'
+      }`}
+    >
+      {/* Scroll progress */}
+      <span
+        ref={progressRef}
+        className="absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 bg-gradient-to-r from-amber-600 via-amber-400 to-orange-500"
+        aria-hidden="true"
+      />
+
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
-        {/* Increased Top and Bottom Spacing */}
-        <div className="flex items-center justify-between h-20 md:h-24">
-          
+        {/* Header height eases down once the page is scrolled */}
+        <div
+          className={`flex items-center justify-between transition-[height] duration-500 ease-out ${
+            scrolled ? 'h-16 md:h-20' : 'h-20 md:h-24'
+          }`}
+        >
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link
@@ -94,7 +150,9 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
                 <img
                   src={logoUrl}
                   alt={logoAlt}
-                  className="h-14 md:h-16 w-auto max-w-[260px] object-contain mix-blend-screen transition-transform duration-300 group-hover:scale-105"
+                  className={`w-auto max-w-[260px] object-contain mix-blend-screen transition-all duration-500 ease-out group-hover:scale-105 ${
+                    scrolled ? 'h-11 md:h-13' : 'h-14 md:h-16'
+                  }`}
                 />
               ) : (
                 <span className="text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 animate-text-shimmer">
@@ -105,11 +163,12 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8 items-center h-full">
+          <nav className="hidden md:flex space-x-8 items-center h-full" aria-label="Primary">
             {data.navigationMenu?.map((item, idx) => {
               // Active Link Matching Logic
               const isActive = pathname === item.link || (item.link !== '/' && pathname.startsWith(item.link))
               const resolvedHref = resolveNavLink(item.link, pathname)
+              const hasSubMenu = !!item.subMenu && item.subMenu.length > 0
 
               return (
                 <div key={item.id || idx} className="relative group/nav py-4 flex items-center h-full">
@@ -121,20 +180,23 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
                     }`}
                   >
                     <span>{item.label}</span>
-                    {item.subMenu && item.subMenu.length > 0 && (
-                      <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover/nav:rotate-180 text-amber-100/60" />
+                    {hasSubMenu && (
+                      <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover/nav:rotate-180 group-focus-within/nav:rotate-180 text-amber-100/60" />
                     )}
                   </Link>
 
-                  {/* Active bottom bar line */}
-                  <span className={`absolute bottom-0 left-0 h-0.5 bg-amber-500 transition-all duration-300 ${
-                    isActive ? 'w-full' : 'w-0 group-hover/nav:w-full'
-                  }`} />
+                  {/* Active bottom bar line (grows from the left) */}
+                  <span
+                    className={`absolute bottom-0 left-0 h-0.5 w-full origin-left bg-gradient-to-r from-amber-500 to-amber-300 transition-transform duration-500 ease-out ${
+                      isActive ? 'scale-x-100' : 'scale-x-0 group-hover/nav:scale-x-100'
+                    }`}
+                    aria-hidden="true"
+                  />
 
-                  {/* Nested Submenu Items Dropdown */}
-                  {item.subMenu && item.subMenu.length > 0 && (
-                    <div className="absolute top-[85%] left-0 mt-2 w-52 bg-[#18110B] border border-amber-950/20 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 transform translate-y-2 group-hover/nav:translate-y-0 z-50">
-                      {item.subMenu.map((sub, sIdx) => {
+                  {/* Nested Submenu Items Dropdown (opens on hover and keyboard focus) */}
+                  {hasSubMenu && (
+                    <div className="absolute top-[85%] left-0 mt-2 w-56 bg-[#18110B] border border-amber-500/10 rounded-2xl shadow-2xl py-3 opacity-0 invisible scale-95 origin-top-left group-hover/nav:opacity-100 group-hover/nav:visible group-hover/nav:scale-100 group-focus-within/nav:opacity-100 group-focus-within/nav:visible group-focus-within/nav:scale-100 transition-all duration-300 ease-out transform translate-y-2 group-hover/nav:translate-y-0 group-focus-within/nav:translate-y-0 z-50">
+                      {item.subMenu!.map((sub, sIdx) => {
                         const isSubActive = pathname === sub.link
                         const subResolvedHref = resolveNavLink(sub.link, pathname)
                         return (
@@ -142,8 +204,10 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
                             key={sIdx}
                             href={subResolvedHref}
                             onClick={(e) => handleSmoothScrollClick(e, subResolvedHref, pathname)}
-                            className={`block px-5 py-2.5 text-sm font-bold transition-colors duration-200 ${
-                              isSubActive ? 'text-amber-400 bg-white/5' : 'text-amber-100/80 hover:text-amber-400 hover:bg-white/5'
+                            className={`block px-5 py-2.5 text-sm font-bold border-l-2 transition-all duration-300 hover:pl-7 ${
+                              isSubActive
+                                ? 'text-amber-400 bg-white/5 border-amber-500'
+                                : 'text-amber-100/80 hover:text-amber-400 hover:bg-white/5 border-transparent hover:border-amber-500'
                             }`}
                           >
                             {sub.label}
@@ -157,16 +221,16 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
             })}
           </nav>
 
-          {/* Desktop CTA (Hover Swap) */}
+          {/* Desktop CTA (fill-sweep hover swap) */}
           <div className="hidden md:flex items-center">
             {data.ctaButton?.text ? (
               <Link
                 href={getCtaHref(data.ctaButton, pathname)}
                 onClick={(e) => handleSmoothScrollClick(e, getCtaHref(data.ctaButton, pathname), pathname)}
-                className="inline-flex items-center gap-1.5 px-6 py-3 bg-amber-500 hover:bg-transparent border border-transparent hover:border-amber-500 text-slate-950 hover:text-amber-400 text-sm font-extrabold rounded-lg shadow-md hover:shadow-amber-500/10 transition-all duration-300"
+                className="btn btn-primary btn-sm"
               >
                 <span>{data.ctaButton.text}</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="btn-icon w-4 h-4" aria-hidden="true" />
               </Link>
             ) : null}
           </div>
@@ -175,87 +239,119 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
           <div className="md:hidden">
             <button
               type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-amber-100/70 hover:text-white hover:bg-white/10 transition-colors duration-200"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              className="relative flex h-11 w-11 items-center justify-center rounded-xl text-amber-100/80 hover:text-white hover:bg-white/10 active:scale-90 transition-all duration-200"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              <Menu
+                className={`absolute w-6 h-6 transition-all duration-300 ${
+                  mobileMenuOpen ? 'rotate-90 scale-50 opacity-0' : 'rotate-0 scale-100 opacity-100'
+                }`}
+              />
+              <X
+                className={`absolute w-6 h-6 transition-all duration-300 ${
+                  mobileMenuOpen ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-50 opacity-0'
+                }`}
+              />
             </button>
           </div>
-
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-[#18110B] border-b border-amber-950/20 px-4 pt-4 pb-6 space-y-4 shadow-xl">
-          <nav className="flex flex-col space-y-3">
-            {data.navigationMenu?.map((item, idx) => {
-              const isActive = pathname === item.link
-              const resolvedHref = resolveNavLink(item.link, pathname)
+      {/* Mobile Drawer Menu: grid-rows 0fr -> 1fr animates to the content's natural height */}
+      <div
+        id="mobile-menu"
+        className={`md:hidden grid transition-[grid-template-rows,opacity] duration-500 ease-out ${
+          mobileMenuOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+        }`}
+        inert={!mobileMenuOpen}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <div className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-amber-950/20 px-4 pt-4 pb-6 space-y-4">
+            <nav className="flex flex-col space-y-3" aria-label="Mobile">
+              {data.navigationMenu?.map((item, idx) => {
+                const isActive = pathname === item.link
+                const resolvedHref = resolveNavLink(item.link, pathname)
 
-              return (
-                <div key={item.id || idx} className="flex flex-col space-y-1">
-                  <Link
-                    href={resolvedHref}
-                    onClick={(e) => {
-                      handleSmoothScrollClick(e, resolvedHref, pathname)
-                      if (!item.subMenu || item.subMenu.length === 0) {
-                        setMobileMenuOpen(false)
-                      }
-                    }}
-                    className={`text-base font-semibold p-2 rounded-lg hover:bg-white/5 transition-all duration-200 ${
-                      isActive ? 'text-amber-400 font-extrabold bg-white/5' : 'text-amber-100/80 hover:text-amber-400'
+                return (
+                  <div
+                    key={item.id || idx}
+                    className={`flex flex-col space-y-1 transition-all duration-500 ease-out ${
+                      mobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
                     }`}
+                    style={{ transitionDelay: mobileMenuOpen ? `${120 + idx * 55}ms` : '0ms' }}
                   >
-                    {item.label}
-                  </Link>
+                    <Link
+                      href={resolvedHref}
+                      onClick={(e) => {
+                        handleSmoothScrollClick(e, resolvedHref, pathname)
+                        if (!item.subMenu || item.subMenu.length === 0) {
+                          setMobileMenuOpen(false)
+                        }
+                      }}
+                      className={`text-base font-semibold p-2 rounded-lg hover:bg-white/5 transition-all duration-200 ${
+                        isActive ? 'text-amber-400 font-extrabold bg-white/5' : 'text-amber-100/80 hover:text-amber-400'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
 
-                  {/* Mobile Submenu links rendering */}
-                  {item.subMenu && item.subMenu.length > 0 && (
-                    <div className="pl-6 flex flex-col space-y-2 border-l border-amber-950/15 py-1">
-                      {item.subMenu.map((sub, sIdx) => {
-                        const isSubActive = pathname === sub.link
-                        const subResolvedHref = resolveNavLink(sub.link, pathname)
-                        return (
-                          <Link
-                            key={sIdx}
-                            href={subResolvedHref}
-                            onClick={(e) => {
-                              handleSmoothScrollClick(e, subResolvedHref, pathname)
-                              setMobileMenuOpen(false)
-                            }}
-                            className={`text-sm font-semibold p-1.5 transition-colors ${
-                              isSubActive ? 'text-amber-400 font-bold' : 'text-amber-100/60 hover:text-amber-400'
-                            }`}
-                          >
-                            {sub.label}
-                          </Link>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </nav>
+                    {/* Mobile Submenu links rendering */}
+                    {item.subMenu && item.subMenu.length > 0 && (
+                      <div className="pl-6 flex flex-col space-y-2 border-l border-amber-500/20 py-1">
+                        {item.subMenu.map((sub, sIdx) => {
+                          const isSubActive = pathname === sub.link
+                          const subResolvedHref = resolveNavLink(sub.link, pathname)
+                          return (
+                            <Link
+                              key={sIdx}
+                              href={subResolvedHref}
+                              onClick={(e) => {
+                                handleSmoothScrollClick(e, subResolvedHref, pathname)
+                                setMobileMenuOpen(false)
+                              }}
+                              className={`text-sm font-semibold p-1.5 transition-colors ${
+                                isSubActive ? 'text-amber-400 font-bold' : 'text-amber-100/60 hover:text-amber-400'
+                              }`}
+                            >
+                              {sub.label}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </nav>
 
-          {data.ctaButton?.text && (
-            <div className="pt-4 border-t border-amber-950/15">
-              <Link
-                href={getCtaHref(data.ctaButton, pathname)}
-                onClick={(e) => {
-                  handleSmoothScrollClick(e, getCtaHref(data.ctaButton, pathname), pathname)
-                  setMobileMenuOpen(false)
+            {data.ctaButton?.text && (
+              <div
+                className={`pt-4 border-t border-amber-950/15 transition-all duration-500 ease-out ${
+                  mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+                }`}
+                style={{
+                  transitionDelay: mobileMenuOpen ? `${120 + (data.navigationMenu?.length ?? 0) * 55}ms` : '0ms',
                 }}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-amber-500 hover:bg-transparent border border-transparent hover:border-amber-500 text-slate-950 hover:text-amber-400 font-bold rounded-lg transition-all duration-300"
               >
-                <span>{data.ctaButton.text}</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          )}
+                <Link
+                  href={getCtaHref(data.ctaButton, pathname)}
+                  onClick={(e) => {
+                    handleSmoothScrollClick(e, getCtaHref(data.ctaButton, pathname), pathname)
+                    setMobileMenuOpen(false)
+                  }}
+                  className="btn btn-primary btn-sm w-full"
+                >
+                  <span>{data.ctaButton.text}</span>
+                  <ArrowRight className="btn-icon w-4 h-4" aria-hidden="true" />
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </header>
   )
 }

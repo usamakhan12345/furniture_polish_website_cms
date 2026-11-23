@@ -1,14 +1,26 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Where } from 'payload'
+
+/**
+ * Reviews visible on the public website: the ones an admin accepted.
+ *
+ * Reviews saved before moderation existed have no `status`. They were already public, so they
+ * keep counting as accepted instead of silently vanishing from the site.
+ */
+export const publicFeedbackWhere: Where = {
+  or: [{ status: { equals: 'approved' } }, { status: { exists: false } }],
+}
 
 export const Feedbacks: CollectionConfig = {
   slug: 'feedbacks',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'company', 'rating', 'createdAt'],
+    defaultColumns: ['name', 'company', 'rating', 'status', 'createdAt'],
   },
+  defaultSort: '-createdAt',
   access: {
-    create: () => true, // Anyone can submit feedback
-    read: () => true, // Anyone can read feedbacks (frontend API queries this list)
+    create: () => true, // Anyone can submit a review (it starts out as "pending")
+    // Visitors only ever see accepted reviews; logged-in admins see everything to moderate it.
+    read: ({ req: { user } }) => (user ? true : publicFeedbackWhere),
     update: ({ req: { user } }) => !!user,
     delete: ({ req: { user } }) => !!user,
   },
@@ -43,6 +55,32 @@ export const Feedbacks: CollectionConfig = {
       type: 'textarea',
       required: true,
       label: 'Feedback / Review Content',
+    },
+    {
+      name: 'status',
+      type: 'radio',
+      label: 'Review Status',
+      required: true,
+      defaultValue: 'pending',
+      index: true,
+      options: [
+        { label: 'Pending (under review)', value: 'pending' },
+        { label: 'Accept (show on website)', value: 'approved' },
+        { label: 'Reject (keep hidden)', value: 'rejected' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'Only accepted reviews appear on the website.',
+      },
+      access: {
+        // Visitors can submit a review, but only an admin can decide its outcome.
+        create: ({ req: { user } }) => !!user,
+        update: ({ req: { user } }) => !!user,
+      },
+      hooks: {
+        // Legacy reviews (no status stored) show as accepted, matching `publicFeedbackWhere`.
+        afterRead: [({ value }) => value ?? 'approved'],
+      },
     },
   ],
   timestamps: true,

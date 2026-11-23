@@ -13,6 +13,16 @@ import { FAQSection } from './FAQSection'
 import { FeedbackSection } from './FeedbackSection'
 import { ReadyToBuild } from './ReadyToBuild'
 import { ContactSection } from './ContactSection'
+import { ContentSplit } from './ContentSplit'
+import { JourneyTimeline } from './JourneyTimeline'
+import { ProcessSteps } from './ProcessSteps'
+import { CoreValues } from './CoreValues'
+import { TeamSection } from './TeamSection'
+import { FinishShowcase } from './FinishShowcase'
+import { PortfolioGrid } from './PortfolioGrid'
+import { ContactInfo } from './ContactInfo'
+import { ContactForm } from './ContactForm'
+import { MapSection } from './MapSection'
 
 const blockComponents: Record<string, React.ComponentType<any>> = {
   HomeBanner,
@@ -29,6 +39,16 @@ const blockComponents: Record<string, React.ComponentType<any>> = {
   FeedbackSection,
   ReadyToBuild,
   ContactSection,
+  ContentSplit,
+  JourneyTimeline,
+  ProcessSteps,
+  CoreValues,
+  TeamSection,
+  FinishShowcase,
+  PortfolioGrid,
+  ContactInfo,
+  ContactForm,
+  MapSection,
 }
 
 export interface BlockRendererProps {

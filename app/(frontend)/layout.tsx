@@ -32,13 +32,22 @@ export default async function AppLayout({
   const footerData = await getFooter()
 
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} scroll-smooth`}>
+    // suppressHydrationWarning: the inline script below adds `reveal-ready` to <html> before hydration.
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} scroll-smooth`} suppressHydrationWarning>
+      <head>
+        {/* Opt in to scroll-reveal animations only when they can actually run (see ui/Reveal.tsx). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if('IntersectionObserver' in window&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('reveal-ready')}}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
         <HashScrollHandler />
         <ScrollToTop />
         <Header data={headerData} />
-        {/* Padding-top to avoid content hiding behind fixed header */}
-        <main className="flex-grow pt-20">
+        {/* Padding-top to avoid content hiding behind fixed header (h-20 / md:h-24) */}
+        <main className="flex-grow pt-20 md:pt-24">
           {children}
         </main>
         <Footer data={footerData} />

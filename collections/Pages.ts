@@ -13,6 +13,16 @@ import { FAQSectionBlock } from '../blocks/FAQSection'
 import { FeedbackSectionBlock } from '../blocks/FeedbackSection'
 import { ReadyToBuildBlock } from '../blocks/ReadyToBuild'
 import { ContactSectionBlock } from '../blocks/ContactSection'
+import { JourneyTimelineBlock } from '../blocks/JourneyTimeline'
+import { ProcessStepsBlock } from '../blocks/ProcessSteps'
+import { CoreValuesBlock } from '../blocks/CoreValues'
+import { TeamSectionBlock } from '../blocks/TeamSection'
+import { ContactInfoBlock } from '../blocks/ContactInfo'
+import { ContactFormBlock } from '../blocks/ContactForm'
+import { MapSectionBlock } from '../blocks/MapSection'
+import { PortfolioGridBlock } from '../blocks/PortfolioGrid'
+import { FinishShowcaseBlock } from '../blocks/FinishShowcase'
+import { ContentSplitBlock } from '../blocks/ContentSplit'
 import { imageHelper } from '../fields/helpers'
 
 export const Pages: CollectionConfig = {
@@ -75,6 +85,17 @@ export const Pages: CollectionConfig = {
         FeedbackSectionBlock,
         ReadyToBuildBlock,
         ContactSectionBlock,
+        // Sections for inner pages (About, Experience, Contact, ...)
+        ContentSplitBlock,
+        JourneyTimelineBlock,
+        ProcessStepsBlock,
+        CoreValuesBlock,
+        TeamSectionBlock,
+        FinishShowcaseBlock,
+        PortfolioGridBlock,
+        ContactInfoBlock,
+        ContactFormBlock,
+        MapSectionBlock,
       ],
     },
   ],

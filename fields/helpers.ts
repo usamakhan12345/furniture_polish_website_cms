@@ -25,7 +25,9 @@ export const imageHelper = (
 export const ctaHelper = (
   name: string = 'cta',
   label: string = 'Call to Action',
-  overrides?: Partial<GroupField>
+  overrides?: Partial<GroupField>,
+  /** Pass `false` for an optional button: it then only shows when "Button Text" is filled in. */
+  textRequired: boolean = true
 ): GroupField => ({
   name,
   label,
@@ -34,7 +36,7 @@ export const ctaHelper = (
     {
       name: 'text',
       type: 'text',
-      required: true,
+      required: textRequired,
       label: 'Button Text',
     },
     {

@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server'
 import { getPayloadClient } from '../../../utilities/api'
+import { publicFeedbackWhere } from '../../../collections/Feedbacks'
 
 export async function GET() {
   try {
     const payload = await getPayloadClient()
+    // Local API calls skip access control, so only accepted reviews are requested explicitly.
     const result = await payload.find({
       collection: 'feedbacks',
+      where: publicFeedbackWhere,
       limit: 100,
       sort: '-createdAt',
     })
@@ -32,7 +35,8 @@ export async function POST(req: Request) {
 
     const payload = await getPayloadClient()
 
-    const doc = await payload.create({
+    // New reviews always start as "pending"; an admin accepts or rejects them in the CMS.
+    await payload.create({
       collection: 'feedbacks',
       data: {
         name,
@@ -40,10 +44,11 @@ export async function POST(req: Request) {
         title: title || '',
         rating: Number(rating) || 5,
         feedback,
+        status: 'pending',
       },
     })
 
-    return NextResponse.json({ success: true, doc })
+    return NextResponse.json({ success: true, status: 'pending' })
   } catch (error: any) {
     console.error('Error creating feedback:', error)
     return NextResponse.json(
