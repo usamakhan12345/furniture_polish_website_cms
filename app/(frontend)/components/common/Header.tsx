@@ -40,6 +40,11 @@ export interface HeaderProps {
   } | null
 }
 
+
+
+
+
+
 // Utility to resolve smooth anchor navigation across different page slugs
 const resolveNavLink = (href: string, pathname: string) => {
   if (href.startsWith('#')) {
